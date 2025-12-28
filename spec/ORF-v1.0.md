@@ -43,6 +43,10 @@ The Open Receipt Format (ORF) is a standardized, JSON-based format for digital r
 5. **Minimal**: Required fields only; everything else optional
 
 ## Core Schema
+### Full Schema
+See schema.json
+```
+
 ### Minimal Valid ORF Receipt
 ```json
 {
@@ -69,46 +73,41 @@ The Open Receipt Format (ORF) is a standardized, JSON-based format for digital r
 }
 
 ```
+### Field Definitions**
 
-### Full Schema
-
-```
-
-## Field Definitions
-
-### receipt_id (required)
+**receipt_id** (required)
 - **Type**: String
 - **Description**: Unique identifier for this receipt
 - **Format**: UUID recommended, but any unique string accepted
 - **Example**: `"a3f2b1c0-9d7e-4f5a-b8c2-1e3d4f5a6b7c"`
 
-### orf_version (required)
+**orf_version** (required)
 - **Type**: String
 - **Description**: Version of ORF spec this receipt follows
 - **Format**: Semantic versioning (major.minor)
 - **Example**: `"1.0"`
 
-### merchant.name (required)
+**merchant.name** (required)
 - **Type**: String
 - **Description**: Human-readable merchant name
 - **Example**: `"The Coffee Shop"`
 
-### transaction.timestamp (required)
+**transaction.timestamp** (required)
 - **Type**: String
 - **Format**: ISO 8601 with timezone
 - **Example**: `"2024-12-28T14:30:00-08:00"`
 
-### transaction.currency (required)
+**transaction.currency** (required)
 - **Type**: String
 - **Format**: ISO 4217 currency code
 - **Example**: `"USD"`, `"EUR"`, `"GBP"`
 
-### items[].quantity (required)
+**items[].quantity** (required)
 - **Type**: Number
 - **Description**: Quantity of this item purchased
 - **Note**: Can be decimal for weight-based items (e.g., 0.5 kg)
 
-### totals.* (required)
+**totals.** (required)
 - **Type**: Number
 - **Format**: Decimal number, two decimal places recommended
 - **Note**: `subtotal + tax + tip - discount = total`
