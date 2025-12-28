@@ -1,0 +1,67 @@
+{
+  "orf_version": "1.0",
+  "receipt_id": "INV-2024-12-28-09876",
+  "merchant": {
+    "name": "TechGear Electronics",
+    "location": {
+      "address": "456 Market Street",
+      "city": "Seattle",
+      "postal_code": "98101",
+      "country_code": "US"
+    },
+    "tax_id": "98-7654321",
+    "contact": {
+      "email": "support@techgear.com",
+      "website": "https://techgear.com"
+    }
+  },
+  "transaction": {
+    "timestamp": "2024-12-28T14:22:10-08:00",
+    "currency": "USD"
+  },
+  "items": [
+    {
+      "name": "Wireless Mouse",
+      "description": "Logitech MX Master 3S",
+      "sku": "LOG-MX3S-BLK",
+      "quantity": 1,
+      "unit_price": 99.99,
+      "total_price": 99.99,
+      "category": "Computer Accessories"
+    },
+    {
+      "name": "USB-C Cable",
+      "description": "2m, USB 3.2",
+      "sku": "CBL-USBC-2M",
+      "quantity": 2,
+      "unit_price": 12.99,
+      "total_price": 25.98,
+      "category": "Cables"
+    }
+  ],
+  "totals": {
+    "subtotal": 125.97,
+    "tax": 12.35,
+    "total": 138.32
+  },
+  "payment": {
+    "method": "card",
+    "last_four": "8765",
+    "card_brand": "Mastercard",
+    "transaction_id": "txn_1234567890abcdef"
+  },
+  "metadata": {
+    "return_policy": {
+      "days": 30,
+      "conditions": "Original packaging required, must include receipt",
+      "url": "https://techgear.com/returns"
+    },
+    "warranties": [
+      {
+        "item_reference": "LOG-MX3S-BLK",
+        "duration_days": 730,
+        "terms_url": "https://techgear.com/warranty/logitech-mx3s"
+      }
+    ]
+  }
+}
