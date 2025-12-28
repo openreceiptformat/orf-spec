@@ -1,51 +1,80 @@
 {
-  "orf_version": "1.0",
-  "receipt_id": "rst-20241228-003421",
+  "orf_version": "0.1.0",
+  "receipt": {
+    "receipt_id": "BELLA-20241228-003421",
+    "issue_timestamp": "2024-12-28T19:34:21-05:00",
+    "receipt_type": "sale",
+    "status": "issued"
+  },
   "merchant": {
-    "name": "Bella Trattoria",
-    "location": {
-      "city": "New York",
-      "state": "NY",
-      "postal_code": "10013"
-    }
+    "merchant_id": "BELLA-NYC-001",
+    "legal_name": "Bella Trattoria Inc.",
+    "display_name": "Bella Trattoria",
+    "country_code": "US",
+    "tax_identifiers": [
+      {
+        "scheme": "US_EIN",
+        "value": "98-7654321"
+      }
+    ]
   },
-  "transaction": {
-    "timestamp": "2024-12-28T19:34:21-05:00",
-    "currency": "USD"
-  },
-  "items": [
+  "line_items": [
     {
-      "name": "Margherita Pizza",
-      "description": "Wood-fired, fresh mozzarella",
+      "line_item_id": "1",
+      "description": "Margherita Pizza - Wood-fired, fresh mozzarella",
       "quantity": 1,
       "unit_price": 18.00,
-      "total_price": 18.00
+      "net_amount": 18.00,
+      "line_total": 18.00
     },
     {
-      "name": "Caesar Salad",
+      "line_item_id": "2",
+      "description": "Caesar Salad - no anchovies, extra parmesan",
       "quantity": 1,
       "unit_price": 12.00,
-      "total_price": 12.00,
-      "modifiers": ["no anchovies", "extra parmesan"]
+      "net_amount": 12.00,
+      "line_total": 12.00
     },
     {
-      "name": "House Red Wine",
-      "description": "Glass",
+      "line_item_id": "3",
+      "description": "House Red Wine - Glass",
       "quantity": 2,
       "unit_price": 9.00,
-      "total_price": 18.00
+      "net_amount": 18.00,
+      "line_total": 18.00
     }
   ],
-  "totals": {
-    "subtotal": 48.00,
-    "tax": 4.32,
-    "tip": 10.00,
-    "total": 62.32
+  "tax": {
+    "tax_scheme": "US_SALES_TAX",
+    "tax_lines": [
+      {
+        "rate": 0.08875,
+        "base_amount": 48.00,
+        "tax_amount": 4.26,
+        "jurisdiction": "US-NY-NYC"
+      }
+    ]
   },
   "payment": {
-    "method": "card"
+    "payment_method": "card",
+    "provider": "Mastercard"
   },
-  "metadata": {
-    "notes": "Table 7, Server: Maria"
+  "total": 62.26,
+  "currency": "USD",
+  "extensions": {
+    "tip": {
+      "amount": 10.00,
+      "percentage": 0.208
+    },
+    "restaurant": {
+      "table_number": "7",
+      "server_name": "Maria",
+      "party_size": 2
+    },
+    "us_sales_tax": {
+      "state": "NY",
+      "local_jurisdiction": "New York City",
+      "nexus": true
+    }
   }
 }
