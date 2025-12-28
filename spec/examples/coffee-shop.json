@@ -1,28 +1,68 @@
 {
-  "orf_version": "1.0",
-  "receipt_id": "a3f2b1c0-...",
-  "merchant": {
-    "name": "The Coffee Shop",
-    "location": {
-      "city": "San Francisco",
-      "postal_code": "94102"
-    }
+  "orf_version": "0.1.0",
+  "receipt": {
+    "receipt_id": "COFFEE-2024-12-28-001",
+    "issue_timestamp": "2024-12-28T09:15:30-08:00",
+    "receipt_type": "sale",
+    "status": "issued"
   },
-  "items": [
+  "merchant": {
+    "merchant_id": "DAILYGRIND-SF-001",
+    "legal_name": "Daily Grind Coffee LLC",
+    "display_name": "The Daily Grind Coffee",
+    "country_code": "US",
+    "tax_identifiers": [
+      {
+        "scheme": "US_EIN",
+        "value": "12-3456789"
+      }
+    ]
+  },
+  "line_items": [
     {
-      "name": "Cappuccino",
+      "line_item_id": "1",
+      "description": "Cappuccino - Medium, oat milk",
       "quantity": 1,
       "unit_price": 4.50,
-      "total_price": 4.50
+      "net_amount": 4.50,
+      "line_total": 4.50
+    },
+    {
+      "line_item_id": "2",
+      "description": "Blueberry Muffin",
+      "quantity": 1,
+      "unit_price": 3.75,
+      "net_amount": 3.75,
+      "line_total": 3.75
     }
   ],
-  "totals": {
-    "subtotal": 4.50,
-    "tax": 0.41,
-    "total": 4.91
+  "tax": {
+    "tax_scheme": "US_SALES_TAX",
+    "tax_lines": [
+      {
+        "rate": 0.0875,
+        "base_amount": 8.25,
+        "tax_amount": 0.72,
+        "jurisdiction": "US-CA-SF"
+      }
+    ]
   },
-  "transaction": {
-    "timestamp": "2024-12-28T09:15:00Z",
-    "currency": "USD"
+  "payment": {
+    "payment_method": "card",
+    "provider": "Visa",
+    "authorization_code": "AUTH123456"
+  },
+  "total": 10.47,
+  "currency": "USD",
+  "extensions": {
+    "tip": {
+      "amount": 1.50,
+      "percentage": 0.15
+    },
+    "us_sales_tax": {
+      "state": "CA",
+      "local_jurisdiction": "San Francisco",
+      "nexus": true
+    }
   }
 }
