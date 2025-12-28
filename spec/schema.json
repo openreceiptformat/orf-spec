@@ -1,97 +1,152 @@
 {
-  "orf_version": "0.1.0",
-  "receipt": {
-    "receipt_id": "ORF-2025-00004521",
-    "issue_timestamp": "2025-09-18T14:32:11Z",
-    "receipt_type": "sale",
-    "status": "issued"
-  },
-
-  "merchant": {
-    "merchant_id": "MER-88921",
-    "legal_name": "Global Demo Retail Ltd.",
-    "display_name": "Global Demo Store",
-    "country_code": "MX",
-    "tax_identifiers": [
-      { "scheme": "RFC", "value": "GDR920101AA1" },
-      { "scheme": "EU_VAT", "value": "DE123456789" },
-      { "scheme": "US_EIN", "value": "12-3456789" }
-    ]
-  },
-
-  "customer": {
-    "legal_name": "Jane Doe",
-    "tax_identifiers": [
-      { "scheme": "EU_VAT", "value": "FR987654321" }
-    ]
-  },
-
-  "line_items": [
-    {
-      "line_item_id": "1",
-      "description": "Medical-grade sensor device",
-      "quantity": 1,
-      "unit_price": 100.00,
-      "net_amount": 100.00,
-      "line_total": 119.00
-    }
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openreceipt.org/schema/orf-0.1.json",
+  "title": "Open Receipt Format (ORF)",
+  "type": "object",
+  "required": [
+    "orf_version",
+    "receipt",
+    "merchant",
+    "line_items",
+    "total",
+    "currency"
   ],
+  "properties": {
+    "orf_version": {
+      "type": "string",
+      "example": "0.1.0"
+    },
 
-  "tax": {
-    "tax_scheme": "MULTI",
-    "tax_lines": [
-      {
-        "rate": 0.19,
-        "base_amount": 100.00,
-        "tax_amount": 19.00,
-        "jurisdiction": "EU-DE"
-      },
-      {
-        "rate": 0.0625,
-        "base_amount": 100.00,
-        "tax_amount": 6.25,
-        "jurisdiction": "US-TX"
+    "receipt": {
+      "type": "object",
+      "required": ["receipt_id", "issue_timestamp", "receipt_type"],
+      "properties": {
+        "receipt_id": { "type": "string" },
+        "issue_timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "receipt_type": {
+          "type": "string",
+          "enum": ["sale", "refund", "void", "proforma"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["issued", "voided", "reissued"]
+        }
       }
-    ]
-  },
-
-  "payment": {
-    "payment_method": "card",
-    "provider": "VISA",
-    "authorization_code": "AUTH998877"
-  },
-
-  "total": 125.25,
-  "currency": "USD",
-
-  "trust": {
-    "hash": "3f2a1c9b8e...",
-    "hash_algorithm": "SHA-256",
-    "signature": "MEYCIQDx...",
-    "signed_by": "Global Demo POS v2.3"
-  },
-
-  "extensions": {
-    "mx_cfdi": {
-      "uuid": "550e8400-e29b-41d4-a716-446655440000",
-      "pac_provider": "PAC-DEMO",
-      "certificate": "MIIF2DCCA8CgAwIBAgI...",
-      "sat_status": "VALID"
     },
-    "br_nfe": {
-      "access_key": "35190801234567000190550010000012341000012345",
-      "authorization_protocol": "135190000000123",
-      "qr_code_url": "https://sefaz.br/qrcode?id=..."
+
+    "merchant": {
+      "type": "object",
+      "required": ["legal_name", "country_code"],
+      "properties": {
+        "merchant_id": { "type": "string" },
+        "legal_name": { "type": "string" },
+        "display_name": { "type": "string" },
+        "country_code": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "tax_identifiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "scheme": { "type": "string" },
+              "value": { "type": "string" }
+            }
+          }
+        }
+      }
     },
-    "eu_vat": {
-      "invoice_type": "FULL",
-      "member_state": "DE",
-      "reverse_charge": false
+
+    "customer": {
+      "type": "object",
+      "properties": {
+        "customer_id": { "type": "string" },
+        "legal_name": { "type": "string" },
+        "tax_identifiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "scheme": { "type": "string" },
+              "value": { "type": "string" }
+            }
+          }
+        }
+      }
     },
-    "us_sales_tax": {
-      "state": "TX",
-      "local_jurisdiction": "Austin",
-      "nexus": true
+
+    "line_items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["description", "quantity", "unit_price", "line_total"],
+        "properties": {
+          "line_item_id": { "type": "string" },
+          "description": { "type": "string" },
+          "quantity": { "type": "number" },
+          "unit_price": { "type": "number" },
+          "net_amount": { "type": "number" },
+          "line_total": { "type": "number" }
+        }
+      }
+    },
+
+    "tax": {
+      "type": "object",
+      "properties": {
+        "tax_scheme": { "type": "string" },
+        "tax_lines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["rate", "tax_amount"],
+            "properties": {
+              "rate": { "type": "number" },
+              "base_amount": { "type": "number" },
+              "tax_amount": { "type": "number" },
+              "jurisdiction": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "payment": {
+      "type": "object",
+      "properties": {
+        "payment_method": { "type": "string" },
+        "provider": { "type": "string" },
+        "authorization_code": { "type": "string" }
+      }
+    },
+
+    "total": {
+      "type": "number"
+    },
+
+    "currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+
+    "trust": {
+      "type": "object",
+      "properties": {
+        "hash": { "type": "string" },
+        "hash_algorithm": { "type": "string" },
+        "signature": { "type": "string" },
+        "signed_by": { "type": "string" }
+      }
+    },
+
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
     }
   }
 }
