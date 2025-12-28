@@ -280,7 +280,7 @@ This specification is released under CC0 1.0 Universal. Anyone may implement wit
 
 ## Contributors
 
-- [Your Name] - Founder & Spec Lead
+- Mike Aguilar - Founder & Spec Lead
 - [Contributors will be listed as they join]
 
 ---
