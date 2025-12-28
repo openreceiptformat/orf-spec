@@ -16,6 +16,7 @@
 5. [Implementation Guidelines](#implementation-guidelines)
 6. [Security Considerations](#security-considerations)
 7. [Examples](#examples)
+8. [International Compliance] international-compliance.md
 
 ## Introduction
 
