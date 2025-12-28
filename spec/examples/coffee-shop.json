@@ -1,0 +1,28 @@
+{
+  "orf_version": "1.0",
+  "receipt_id": "a3f2b1c0-...",
+  "merchant": {
+    "name": "The Coffee Shop",
+    "location": {
+      "city": "San Francisco",
+      "postal_code": "94102"
+    }
+  },
+  "items": [
+    {
+      "name": "Cappuccino",
+      "quantity": 1,
+      "unit_price": 4.50,
+      "total_price": 4.50
+    }
+  ],
+  "totals": {
+    "subtotal": 4.50,
+    "tax": 0.41,
+    "total": 4.91
+  },
+  "transaction": {
+    "timestamp": "2024-12-28T09:15:00Z",
+    "currency": "USD"
+  }
+}
