@@ -43,122 +43,35 @@ The Open Receipt Format (ORF) is a standardized, JSON-based format for digital r
 5. **Minimal**: Required fields only; everything else optional
 
 ## Core Schema
-
-### Minimum Valid Receipt
+### Minimal Valid ORF Receipt
 ```json
 {
-  "orf_version": "1.0",
-  "receipt_id": "unique-string",
+  "orf_version": "0.1.0",
+  "receipt": {
+    "receipt_id": "MIN-2024-001",
+    "issue_timestamp": "2024-12-28T09:15:30Z",
+    "receipt_type": "sale"
+  },
   "merchant": {
-    "name": "Merchant Name"
+    "legal_name": "The Coffee Shop",
+    "country_code": "US"
   },
-  "transaction": {
-    "timestamp": "2024-12-28T10:00:00Z",
-    "currency": "USD"
-  },
-  "items": [
+  "line_items": [
     {
-      "name": "Item Name",
+      "description": "Cappuccino",
       "quantity": 1,
-      "unit_price": 10.00,
-      "total_price": 10.00
+      "unit_price": 4.50,
+      "line_total": 4.50
     }
   ],
-  "totals": {
-    "subtotal": 10.00,
-    "tax": 0.90,
-    "total": 10.90
-  }
+  "total": 4.91,
+  "currency": "USD"
 }
+
 ```
 
 ### Full Schema
-```json
-{
-  "orf_version": "1.0",
-  "receipt_id": "string (required)",
-  
-  "merchant": {
-    "name": "string (required)",
-    "location": {
-      "address": "string (optional)",
-      "city": "string (optional)",
-      "state": "string (optional)",
-      "postal_code": "string (optional)",
-      "country_code": "string (ISO 3166-1 alpha-2, optional)"
-    },
-    "tax_id": "string (optional)",
-    "contact": {
-      "phone": "string (optional)",
-      "email": "string (optional)",
-      "website": "string (optional)"
-    }
-  },
-  
-  "transaction": {
-    "timestamp": "string (ISO 8601, required)",
-    "timezone": "string (IANA timezone, optional)",
-    "currency": "string (ISO 4217, required)",
-    "transaction_type": "string (optional: 'sale', 'return', 'exchange')"
-  },
-  
-  "items": [
-    {
-      "name": "string (required)",
-      "description": "string (optional)",
-      "quantity": "number (required)",
-      "unit_price": "number (required)",
-      "total_price": "number (required)",
-      "sku": "string (optional)",
-      "category": "string (optional)",
-      "modifiers": ["array of strings (optional)"],
-      "tax_rate": "number (optional)",
-      "discounts": [
-        {
-          "description": "string",
-          "amount": "number"
-        }
-      ]
-    }
-  ],
-  
-  "totals": {
-    "subtotal": "number (required)",
-    "tax": "number (required)",
-    "tip": "number (optional)",
-    "service_charge": "number (optional)",
-    "discount": "number (optional)",
-    "total": "number (required)"
-  },
-  
-  "payment": {
-    "method": "string (optional: 'card', 'cash', 'mobile', 'other')",
-    "last_four": "string (optional)",
-    "card_brand": "string (optional)",
-    "transaction_id": "string (optional)"
-  },
-  
-  "metadata": {
-    "return_policy": {
-      "days": "number (optional)",
-      "conditions": "string (optional)",
-      "url": "string (optional)"
-    },
-    "warranties": [
-      {
-        "item_reference": "string",
-        "duration_days": "number",
-        "terms_url": "string"
-      }
-    ],
-    "loyalty": {
-      "program_id": "string",
-      "points_earned": "number",
-      "points_balance": "number"
-    },
-    "notes": "string (optional)"
-  }
-}
+
 ```
 
 ## Field Definitions
