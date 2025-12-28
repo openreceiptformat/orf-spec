@@ -1,0 +1,51 @@
+{
+  "orf_version": "1.0",
+  "receipt_id": "rst-20241228-003421",
+  "merchant": {
+    "name": "Bella Trattoria",
+    "location": {
+      "city": "New York",
+      "state": "NY",
+      "postal_code": "10013"
+    }
+  },
+  "transaction": {
+    "timestamp": "2024-12-28T19:34:21-05:00",
+    "currency": "USD"
+  },
+  "items": [
+    {
+      "name": "Margherita Pizza",
+      "description": "Wood-fired, fresh mozzarella",
+      "quantity": 1,
+      "unit_price": 18.00,
+      "total_price": 18.00
+    },
+    {
+      "name": "Caesar Salad",
+      "quantity": 1,
+      "unit_price": 12.00,
+      "total_price": 12.00,
+      "modifiers": ["no anchovies", "extra parmesan"]
+    },
+    {
+      "name": "House Red Wine",
+      "description": "Glass",
+      "quantity": 2,
+      "unit_price": 9.00,
+      "total_price": 18.00
+    }
+  ],
+  "totals": {
+    "subtotal": 48.00,
+    "tax": 4.32,
+    "tip": 10.00,
+    "total": 62.32
+  },
+  "payment": {
+    "method": "card"
+  },
+  "metadata": {
+    "notes": "Table 7, Server: Maria"
+  }
+}
