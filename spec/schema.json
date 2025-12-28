@@ -1,0 +1,285 @@
+# Open Receipt Format (ORF) Specification
+
+**Version:** 1.0  
+**Status:** Draft  
+**Last Updated:** 2024-12-28
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Design Principles](#design-principles)
+3. [Core Schema](#core-schema)
+4. [Field Definitions](#field-definitions)
+5. [Implementation Guidelines](#implementation-guidelines)
+6. [Security Considerations](#security-considerations)
+7. [Examples](#examples)
+
+## Introduction
+
+The Open Receipt Format (ORF) is a standardized, JSON-based format for digital receipts. It enables interoperability between merchants, point-of-sale systems, and consumer applications while respecting user privacy.
+
+### Goals
+
+- Eliminate paper receipt waste
+- Provide structured, machine-readable transaction data
+- Enable privacy-preserving receipt storage
+- Support merchant innovation (loyalty, analytics, etc.)
+
+### Non-Goals
+
+- Payment processing (handled by existing rails)
+- User authentication (receipts are bearer tokens)
+- Regulatory compliance (region-specific requirements handled separately)
+
+## Design Principles
+
+1. **Privacy-first**: No required user identifiers
+2. **Merchant-friendly**: Easy to generate from existing POS data
+3. **Extensible**: Support future features without breaking changes
+4. **Human-readable**: JSON format, sensible field names
+5. **Minimal**: Required fields only; everything else optional
+
+## Core Schema
+
+### Minimum Valid Receipt
+```json
+{
+  "orf_version": "1.0",
+  "receipt_id": "unique-string",
+  "merchant": {
+    "name": "Merchant Name"
+  },
+  "transaction": {
+    "timestamp": "2024-12-28T10:00:00Z",
+    "currency": "USD"
+  },
+  "items": [
+    {
+      "name": "Item Name",
+      "quantity": 1,
+      "unit_price": 10.00,
+      "total_price": 10.00
+    }
+  ],
+  "totals": {
+    "subtotal": 10.00,
+    "tax": 0.90,
+    "total": 10.90
+  }
+}
+```
+
+### Full Schema
+```json
+{
+  "orf_version": "1.0",
+  "receipt_id": "string (required)",
+  
+  "merchant": {
+    "name": "string (required)",
+    "location": {
+      "address": "string (optional)",
+      "city": "string (optional)",
+      "state": "string (optional)",
+      "postal_code": "string (optional)",
+      "country_code": "string (ISO 3166-1 alpha-2, optional)"
+    },
+    "tax_id": "string (optional)",
+    "contact": {
+      "phone": "string (optional)",
+      "email": "string (optional)",
+      "website": "string (optional)"
+    }
+  },
+  
+  "transaction": {
+    "timestamp": "string (ISO 8601, required)",
+    "timezone": "string (IANA timezone, optional)",
+    "currency": "string (ISO 4217, required)",
+    "transaction_type": "string (optional: 'sale', 'return', 'exchange')"
+  },
+  
+  "items": [
+    {
+      "name": "string (required)",
+      "description": "string (optional)",
+      "quantity": "number (required)",
+      "unit_price": "number (required)",
+      "total_price": "number (required)",
+      "sku": "string (optional)",
+      "category": "string (optional)",
+      "modifiers": ["array of strings (optional)"],
+      "tax_rate": "number (optional)",
+      "discounts": [
+        {
+          "description": "string",
+          "amount": "number"
+        }
+      ]
+    }
+  ],
+  
+  "totals": {
+    "subtotal": "number (required)",
+    "tax": "number (required)",
+    "tip": "number (optional)",
+    "service_charge": "number (optional)",
+    "discount": "number (optional)",
+    "total": "number (required)"
+  },
+  
+  "payment": {
+    "method": "string (optional: 'card', 'cash', 'mobile', 'other')",
+    "last_four": "string (optional)",
+    "card_brand": "string (optional)",
+    "transaction_id": "string (optional)"
+  },
+  
+  "metadata": {
+    "return_policy": {
+      "days": "number (optional)",
+      "conditions": "string (optional)",
+      "url": "string (optional)"
+    },
+    "warranties": [
+      {
+        "item_reference": "string",
+        "duration_days": "number",
+        "terms_url": "string"
+      }
+    ],
+    "loyalty": {
+      "program_id": "string",
+      "points_earned": "number",
+      "points_balance": "number"
+    },
+    "notes": "string (optional)"
+  }
+}
+```
+
+## Field Definitions
+
+### receipt_id (required)
+- **Type**: String
+- **Description**: Unique identifier for this receipt
+- **Format**: UUID recommended, but any unique string accepted
+- **Example**: `"a3f2b1c0-9d7e-4f5a-b8c2-1e3d4f5a6b7c"`
+
+### orf_version (required)
+- **Type**: String
+- **Description**: Version of ORF spec this receipt follows
+- **Format**: Semantic versioning (major.minor)
+- **Example**: `"1.0"`
+
+### merchant.name (required)
+- **Type**: String
+- **Description**: Human-readable merchant name
+- **Example**: `"The Coffee Shop"`
+
+### transaction.timestamp (required)
+- **Type**: String
+- **Format**: ISO 8601 with timezone
+- **Example**: `"2024-12-28T14:30:00-08:00"`
+
+### transaction.currency (required)
+- **Type**: String
+- **Format**: ISO 4217 currency code
+- **Example**: `"USD"`, `"EUR"`, `"GBP"`
+
+### items[].quantity (required)
+- **Type**: Number
+- **Description**: Quantity of this item purchased
+- **Note**: Can be decimal for weight-based items (e.g., 0.5 kg)
+
+### totals.* (required)
+- **Type**: Number
+- **Format**: Decimal number, two decimal places recommended
+- **Note**: `subtotal + tax + tip - discount = total`
+
+## Implementation Guidelines
+
+### For POS Systems
+
+**Generating ORF receipts:**
+
+1. After transaction completion, serialize transaction data to ORF JSON
+2. Assign unique `receipt_id` (UUID recommended)
+3. Include all available data, but only required fields are mandatory
+4. Make receipt available via:
+   - NFC tag (NDEF format)
+   - QR code (URL pointing to receipt endpoint)
+   - API endpoint for programmatic access
+   - Email/SMS with embedded JSON or link
+
+**Storage recommendations:**
+- Retain receipts for minimum 90 days
+- Longer retention for high-value items
+- Comply with local data retention laws
+
+### For Consumer Applications
+
+**Parsing ORF receipts:**
+
+1. Validate `orf_version` is supported (currently only "1.0")
+2. Check all required fields are present
+3. Gracefully handle unknown fields (forward compatibility)
+4. Store locally by default (privacy preservation)
+5. Validate currency codes, country codes against standards
+
+**Storage recommendations:**
+- Store receipts in local database or file system
+- Use `receipt_id` as primary key
+- Index by timestamp, merchant, total for quick retrieval
+- Implement search across items, merchants, categories
+
+## Security Considerations
+
+### Privacy
+
+- No Personally Identifiable Information (PII) required in base format
+- `receipt_id` should not be derivable from transaction details
+- Payment details should be minimal (last 4 digits only)
+- Merchants should not embed tracking identifiers
+
+### Transmission
+
+- Use HTTPS for any API endpoints serving receipts
+- Consider encryption for NFC transmission (though typically short-range is sufficient)
+- Implement rate limiting on receipt retrieval endpoints
+
+### Authenticity
+
+- Consider digital signatures for high-value receipts
+- Use HMAC or JWT for receipt authenticity verification
+- Merchant certificates could validate receipt origin
+
+## Examples
+
+See the [examples directory](examples/) for complete receipt samples:
+- [coffee-shop.json](examples/coffee-shop.json) - Simple transaction
+- [restaurant.json](examples/restaurant.json) - With tip and modifiers
+- [retail.json](examples/retail.json) - With return policy
+
+## Versioning
+
+ORF uses semantic versioning:
+- **Major version** (1.x): Breaking changes, old parsers won't work
+- **Minor version** (x.0): New optional fields, backward compatible
+
+## License
+
+This specification is released under CC0 1.0 Universal. Anyone may implement without restriction.
+
+## Changelog
+
+- **v1.0 (2024-12-28)**: Initial draft release
+
+## Contributors
+
+- [Your Name] - Founder & Spec Lead
+- [Contributors will be listed as they join]
+
+---
+
+**Questions?** Open an issue or start a discussion on GitHub.
