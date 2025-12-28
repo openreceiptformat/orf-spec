@@ -16,7 +16,7 @@
 5. [Implementation Guidelines](#implementation-guidelines)
 6. [Security Considerations](#security-considerations)
 7. [Examples](#examples)
-8. [International Compliance] (https://github.com/openreceiptformat/orf-spec/blob/main/libraries/international-compliance.md)
+8. [International Compliance](international-compliance.md)
 
 ## Introduction
 
