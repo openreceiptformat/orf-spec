@@ -15,138 +15,107 @@ It is **A semantic interchange format**
 
 Composable, optional, and jurisdiction-aware
 
-# Core Design Philosophy
-## Layered Architecture 
-ORF should be explicitly layered:
-- Core (Global Minimum)
-- Regulatory Extensions
-- Industry Extensions
-- Vendor / Experimental Extensions
+# 🧾 Open Receipt Format (ORF)
 
-No field outside the core is mandatory.
+> A privacy-first, open standard for digital receipts
 
-## ORF Core (Universal, Mandatory)
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0%201.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
+[![GitHub stars](https://img.shields.io/github/stars/openreceiptformat/orf-spec.svg?style=social&label=Star)](https://github.com/openreceiptformat/orf-spec)
 
-These are fields that appear in nearly every receipt globally, regardless of tax model.
+## The Problem
 
-### Core Entities
-**Receipt**
+250 billion paper receipts are printed annually worldwide. They:
+- Contain toxic BPA and can't be recycled ♻️
+- Fade within weeks, making returns difficult
+- Cost merchants $500-2,000/year in paper and printer maintenance
+- Are easily lost, creating tax/accounting headaches
 
-- receipt_id (string, globally unique)
-- issue_timestamp (ISO 8601)
-- receipt_type (sale, refund, void, proforma)
-- currency (ISO 4217)
-- total_amount
-- payment_status
+Current "digital receipt" solutions require:
+- Creating accounts at every store
+- Uploading sensitive purchase data to the cloud
+- Using proprietary apps that don't interoperate
 
-**Merchant**
+## The Solution
 
-- merchant_id
-- legal_name
-- display_name (optional)
-- country_code (ISO 3166-1)
+**Open Receipt Format (ORF)** is an open, standardized JSON format that enables:
 
-**Transaction**
+✅ **Privacy-first design** - Receipts stored locally on user's device  
+✅ **Interoperability** - Any app can read any ORF receipt  
+✅ **Merchant-friendly** - Easy to generate from existing POS systems  
+✅ **Future-proof** - Extensible schema supports new features  
 
-- transaction_id
-- payment_method
-- payment_provider (optional)
-- LineItem[]
--- line_item_id
--- description
--- quantity
--- unit_price
-- line_total
+## Quick Example
+```json
+{
+  "orf_version": "1.0",
+  "receipt_id": "a3f2b1c0-...",
+  "merchant": {
+    "name": "The Coffee Shop",
+    "location": {
+      "city": "San Francisco",
+      "postal_code": "94102"
+    }
+  },
+  "items": [
+    {
+      "name": "Cappuccino",
+      "quantity": 1,
+      "unit_price": 4.50,
+      "total_price": 4.50
+    }
+  ],
+  "totals": {
+    "subtotal": 4.50,
+    "tax": 0.41,
+    "total": 4.91
+  },
+  "transaction": {
+    "timestamp": "2024-12-28T09:15:00Z",
+    "currency": "USD"
+  }
+}
+```
 
-### Optional Standard Modules
+## Documentation
 
-Each module is self-contained, versioned, and optional.
+📖 **[Read the Full Specification](spec/ORF-v1.0.md)**  
+📋 **[See Example Receipts](spec/examples/)**  
+🔧 **[Implementation Guide](spec/implementation-guide.md)** *(coming soon)*
 
-**Tax Module (Generic)**
+## Get Involved
 
-- Supports VAT, GST, Sales Tax, etc.
-- tax_scheme (VAT, GST, SALES_TAX)
-- tax_lines[]
--- rate
--- base_amount
--- tax_amount
--- jurisdiction
+We're building this in the open and welcome contributions:
 
-**Jurisdictional Compliance Modules**
+- 💬 **[Join the Discussion](https://github.com/openreceiptformat/orf-spec/discussions)** - Share ideas and ask questions
+- 🐛 **[Report Issues](https://github.com/openreceiptformat/orf-spec/issues)** - Found something unclear?
+- 🤝 **[Contribute](CONTRIBUTING.md)** - Help improve the spec
+- ⭐ **Star this repo** - Show your support!
 
-These should mirror existing government schemas without redefining them.
+## Who's Using ORF?
 
-Examples:
+**Consumer Apps:**
+- [The Ledger](https://github.com/yourusername/ledger) - Reference implementation
+- *Your app here - submit a PR!*
 
-- mx_cfdi
-- br_nfe
-- eu_vat
-- us_sales_tax
-- jp_jct
+**POS Integrations:**
+- *Coming soon*
 
-Each module is
+## Working Group
 
-- Namespaced
-- Optional
-- May include government UUIDs, signatures, hashes
+The ORF specification is maintained by a volunteer working group:
+- **Mike Aguilar** - Founder & Spec Lead
+- *Open positions - [Join us!](https://github.com/openreceiptformat/orf-spec/discussions)*
 
-This makes ORF a container, not a competitor.
+## License
 
-**Industry-Specific Modules**
+The Open Receipt Format specification is released under [CC0 1.0 Universal](LICENSE) - completely open, no restrictions.
 
-Examples:
+Implementation code (libraries, tools) may use different licenses as appropriate.
 
-- Retail
-- SKU / GTIN (GS1)
-- Discounts
-- Loyalty programs
-- Hospitality
-- Room numbers
-- Service periods
-- Gratuities
-- Healthcare
-- Procedure codes
-- Provider NPIs
-- Claim references
+---
 
-**Payment & Settlement Module**
-
-Aligns with ISO 20022 concepts but stays lightweight.
-
-- authorization_code
-- settlement_date
-- card_brand
-- masked_pan
-- wallet_type
-
-### Digital Receipt & Trust Layer
-
-**Verification**
-
-- hash
-- hash_algorithm
-- signed_by
-- signature
-
-**Provenance**
-
-- POS system
-- Version of ORF
-- Receipt lifecycle events (issued, reissued, voided)
-
-### Rendering Is Explicitly Out of Scope
-
-- ORF defines what a receipt means, not how it looks.
-
-Rendering targets:
-
-- PDF
-- HTML
-- ESC/POS
-- Email
-- Wallet passes
-
-These are downstream concerns.
+**Website:** [openreceiptformat.org](https://openreceiptformat.org) *(coming soon)*  
+**Contact:** hello@openreceiptformat.org *(coming soon)*
 
 ## Governance Model 
 
