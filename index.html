@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenRF | The Universal Receipt Standard</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <title>OpenRF | Universal Receipt Standard</title>
     <style>
         :root {
             --primary-purple: #6b3fa0;
@@ -14,81 +13,73 @@
             --dark-text: #2d3436;
         }
         body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; background-color: var(--white); color: var(--dark-text); line-height: 1.6; }
-        header { background-color: var(--primary-purple); color: var(--white); padding: 80px 20px; text-align: center; border-bottom: 8px solid var(--accent-purple); }
-        .header-logo { width: 140px; margin-bottom: 20px; filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.2)); }
-        .container { max-width: 1000px; margin: auto; padding: 60px 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 50px; }
-        .card { background: var(--white); border: 1px solid var(--light-purple); border-radius: 16px; padding: 30px; text-align: center; box-shadow: 0 4px 6px rgba(107, 63, 160, 0.05); transition: all 0.3s ease; }
-        .card img { height: 100px; margin-bottom: 20px; object-fit: contain; }
-        h1, h2, h3 { color: var(--primary-purple); }
-        header h1 { color: var(--white); font-size: 3rem; margin: 0; letter-spacing: -1px; }
+        header { background-color: var(--primary-purple); color: var(--white); padding: 60px 20px; text-align: center; border-bottom: 8px solid var(--accent-purple); }
+        .header-logo { width: 120px; filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.2)); }
+        .container { max-width: 900px; margin: auto; padding: 40px 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin: 40px 0; }
+        .card { background: var(--white); border: 2px solid var(--light-purple); border-radius: 16px; padding: 25px; text-align: center; }
+        .card img { height: 90px; margin-bottom: 15px; }
         
-        /* Stylized area for the Readme content */
-        #readme-content {
-            background: #fafafa;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid var(--light-purple);
-            margin-top: 20px;
+        /* The "Call to Action" Button */
+        .cta-section { background: var(--light-purple); padding: 40px; border-radius: 20px; text-align: center; margin-top: 40px; }
+        .tommy-btn {
+            display: inline-block;
+            background: var(--primary-purple);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(107, 63, 160, 0.3);
+            transition: transform 0.2s;
         }
-        /* Style the markdown elements within the readme */
-        #readme-content h1, #readme-content h2 { border-bottom: 2px solid var(--light-purple); padding-bottom: 10px; }
-        #readme-content code { background: #eee; padding: 2px 5px; border-radius: 4px; }
-        #readme-content pre { background: #2d3436; color: #fff; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        .tommy-btn:hover { transform: scale(1.05); background: var(--accent-purple); }
 
-        footer { text-align: center; padding: 60px; background: var(--light-purple); color: var(--primary-purple); }
+        footer { text-align: center; padding: 40px; font-size: 0.9rem; color: var(--primary-purple); }
     </style>
 </head>
 <body>
 
 <header>
     <img src="libraries/images/orf.png" alt="OpenRF Logo" class="header-logo">
-    <h1>OpenRF</h1>
-    <p style="font-size: 1.4rem; color: var(--light-purple);">The Universal Receipt & Menu Standard</p>
+    <h1 style="margin:10px 0 0 0;">OpenRF</h1>
+    <p style="color: var(--light-purple); margin-top:5px;">Standardizing Digital Receipts & Menus</p>
 </header>
 
 <div class="container">
+    <div style="text-align:center;">
+        <h2>One Protocol. Unlimited Potential.</h2>
+        <p>OpenRF is the open-source alternative to paper waste and data tracking.</p>
+    </div>
+
     <div class="grid">
         <div class="card">
-            <img src="libraries/images/recipta.png" alt="Receipta Vault">
+            <img src="libraries/images/recipta.png" alt="Receipta Logo">
             <h3>Receipta</h3>
-            <p>The <strong>User Vault</strong>. Private, local-first receipt management.</p>
+            <p>The privacy-first mobile vault for collecting OpenRF assets.</p>
         </div>
         <div class="card">
             <img src="libraries/images/tommy.png" alt="Tommy the Tapir">
-            <h3>Tapir (Tommy)</h3>
-            <p>The <strong>Merchant Platform</strong>. Tap-to-menu and Tap-to-receipt infrastructure.</p>
+            <h3>Tapir</h3>
+            <p>The merchant bridge powered by Tommy. "Tap Here" to begin.</p>
         </div>
     </div>
 
-    <section style="margin-top: 80px;">
-        <h2>The Protocol Documentation</h2>
-        <p>Live from the <code>README.md</code>:</p>
-        <div id="readme-content">Loading technical specifications...</div>
-    </section>
+    <div class="cta-section">
+        <img src="libraries/images/tommy.png" style="height: 60px; margin-bottom: 10px;" alt="Tommy">
+        <h3>Ready to build?</h3>
+        <p>Tommy recommends checking out our full technical specification, JSON schemas, and contribution guidelines directly on GitHub.</p>
+        <br>
+        <a href="https://github.com/openreceiptformat/orf-spec/blob/main/README.md" class="tommy-btn">
+            View Live README.md on GitHub
+        </a>
+    </div>
 </div>
 
 <footer>
-    <p>📡 Open Receipt Format Organization • No Paper. No Tracking.</p>
+    <p>📡 Open Receipt Format Organization • 2025</p>
 </footer>
-
-<script>
-    // 1. Get the raw markdown file from your repo
-    // Replace 'openreceiptformat/orf-spec' if your repo name is different
-    const repo = 'openreceiptformat/orf-spec';
-    const readmeUrl = `https://raw.githubusercontent.com/${repo}/main/README.md`;
-
-    fetch(readmeUrl)
-        .then(response => response.text())
-        .then(text => {
-            // 2. Convert Markdown to HTML using Marked.js
-            document.getElementById('readme-content').innerHTML = marked.parse(text);
-        })
-        .catch(err => {
-            document.getElementById('readme-content').innerHTML = "Error loading README. Please view it directly on GitHub.";
-            console.error(err);
-        });
-</script>
 
 </body>
 </html>
