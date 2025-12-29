@@ -19,6 +19,15 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin: 40px 0; }
         .card { background: var(--white); border: 2px solid var(--light-purple); border-radius: 16px; padding: 25px; text-align: center; }
         .card img { height: 90px; margin-bottom: 15px; }
+        .tagline { font-size: 1.4rem; color: var(--accent-purple); font-weight: 500; margin-bottom: 20px; }
+        .why-section { margin: 40px 0; }
+        .why-section h2 { color: var(--primary-purple); border-bottom: 3px solid var(--light-purple); padding-bottom: 10px; }
+        .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-top: 20px; }
+        .benefit-card { background: var(--light-purple); border-radius: 12px; padding: 20px; }
+        .benefit-card h3 { color: var(--primary-purple); margin-top: 0; }
+        .benefit-card ul { list-style: none; padding: 0; margin: 0; }
+        .benefit-card li { padding: 8px 0; padding-left: 25px; position: relative; }
+        .benefit-card li::before { content: "✓"; position: absolute; left: 0; color: var(--primary-purple); font-weight: bold; }
         
         /* The "Call to Action" Button */
         .cta-section { background: var(--light-purple); padding: 40px; border-radius: 20px; text-align: center; margin-top: 40px; }
@@ -50,7 +59,38 @@
 <div class="container">
     <div style="text-align:center;">
         <h2>One Protocol. Unlimited Potential.</h2>
-        <p>OpenRF is the open-source alternative to paper waste and data tracking.</p>
+        <p class="tagline">A privacy-first, open standard for digital receipts</p>
+        <p>250 billion paper receipts are printed annually. They're toxic, easily lost, and impossible to organize. ORF is the open alternative.</p>
+    </div>
+
+    <div class="why-section">
+        <h2>Why ORF?</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <h3>For Users</h3>
+                <ul>
+                    <li>Own your data (stored locally, not in the cloud)</li>
+                    <li>Works with any app that supports ORF</li>
+                    <li>Never lose a receipt again</li>
+                </ul>
+            </div>
+            <div class="benefit-card">
+                <h3>For Merchants</h3>
+                <ul>
+                    <li>Reduce paper costs ($500-2000/year)</li>
+                    <li>Enable digital loyalty programs</li>
+                    <li>Better customer engagement</li>
+                </ul>
+            </div>
+            <div class="benefit-card">
+                <h3>For Developers</h3>
+                <ul>
+                    <li>One format, infinite apps</li>
+                    <li>Clean, structured data</li>
+                    <li>No vendor lock-in</li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div class="grid">

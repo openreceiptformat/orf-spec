@@ -1,0 +1,517 @@
+import React, { useState } from 'react';
+import { AlertCircle, CheckCircle, Info, FileJson, Copy, Check } from 'lucide-react';
+
+const ORFValidator = () => {
+  const [jsonInput, setJsonInput] = useState('');
+  const [validationResult, setValidationResult] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  // Validation schemas
+  const jurisdictionRules = {
+    mx_cfdi: {
+      required: ['version', 'uuid', 'pac_provider', 'sat_status'],
+      patterns: {
+        uuid: /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/,
+        certificate_number: /^[0-9]{20}$/,
+      },
+      enums: {
+        sat_status: ['VIGENTE', 'CANCELADO', 'NO_ENCONTRADO'],
+        version: ['3.3', '4.0']
+      }
+    },
+    br_nfe: {
+      required: ['model', 'access_key', 'authorization_protocol'],
+      patterns: {
+        access_key: /^[0-9]{44}$/,
+        authorization_protocol: /^[0-9]{15}$/,
+        model: /^(55|65)$/
+      }
+    },
+    eu_vat: {
+      required: ['invoice_type', 'member_state'],
+      enums: {
+        invoice_type: ['COMMERCIAL_INVOICE', 'CREDIT_NOTE', 'DEBIT_NOTE', 'SIMPLIFIED_INVOICE']
+      },
+      patterns: {
+        member_state: /^[A-Z]{2}$/
+      }
+    },
+    us_sales_tax: {
+      required: ['state', 'nexus'],
+      patterns: {
+        state: /^[A-Z]{2}$/
+      }
+    },
+    cn_fapiao: {
+      required: ['fapiao_type', 'fapiao_code', 'fapiao_number', 'verification_code'],
+      patterns: {
+        fapiao_code: /^[0-9]{10}$/,
+        fapiao_number: /^[0-9]{8}$/,
+        verification_code: /^[0-9]{20}$/
+      },
+      enums: {
+        fapiao_type: ['VAT_SPECIAL', 'VAT_ORDINARY', 'E_FAPIAO', 'QUOTA_INVOICE']
+      }
+    },
+    in_gst_einvoice: {
+      required: ['version', 'irn', 'acknowledgement_number'],
+      patterns: {
+        irn: /^[0-9a-fA-F]{64}$/,
+        acknowledgement_number: /^[0-9]{15}$/
+      },
+      enums: {
+        supply_type: ['B2B', 'SEZWP', 'SEZWOP', 'EXPWP', 'EXPWOP', 'DEXP']
+      }
+    },
+    jp_qualified_invoice: {
+      required: ['invoice_type', 'registration_number', 'tax_rate_type'],
+      patterns: {
+        registration_number: /^T[0-9]{13}$/
+      },
+      enums: {
+        invoice_type: ['QUALIFIED_INVOICE', 'SIMPLIFIED_INVOICE'],
+        tax_rate_type: ['STANDARD_10', 'REDUCED_8', 'EXEMPT']
+      }
+    },
+    au_tax_invoice: {
+      required: ['document_type', 'abn', 'gst_amount'],
+      patterns: {
+        abn: /^[0-9]{2} [0-9]{3} [0-9]{3} [0-9]{3}$/
+      },
+      enums: {
+        document_type: ['TAX_INVOICE', 'RCTI', 'ADJUSTMENT_NOTE']
+      }
+    },
+    kr_etax_invoice: {
+      required: ['invoice_type', 'approval_number', 'supplier_registration_number', 'buyer_registration_number'],
+      patterns: {
+        approval_number: /^[0-9]{8}-[0-9]{12}-[0-9]{8}$/,
+        supplier_registration_number: /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/,
+        buyer_registration_number: /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/
+      },
+      enums: {
+        invoice_type: ['GENERAL', 'MODIFIED', 'FINAL']
+      }
+    }
+  };
+
+  const validateORF = (data) => {
+    const errors = [];
+    const warnings = [];
+    const info = [];
+
+    // Check if valid JSON
+    if (!data) {
+      return { valid: false, errors: ['Invalid JSON format'], warnings: [], info: [] };
+    }
+
+    // Check required core fields
+    const requiredFields = ['orf_version', 'receipt', 'merchant', 'line_items', 'total', 'currency'];
+    requiredFields.forEach(field => {
+      if (!data[field]) {
+        errors.push(`Missing required field: ${field}`);
+      }
+    });
+
+    // Check ORF version
+    if (data.orf_version && !['0.1.0', '1.0'].includes(data.orf_version)) {
+      warnings.push(`Unusual ORF version: ${data.orf_version}. Expected 0.1.0 or 1.0`);
+    }
+
+    // Validate receipt object
+    if (data.receipt) {
+      const receiptRequired = ['receipt_id', 'issue_timestamp', 'receipt_type'];
+      receiptRequired.forEach(field => {
+        if (!data.receipt[field]) {
+          errors.push(`Missing required receipt field: ${field}`);
+        }
+      });
+
+      // Check receipt_type enum
+      if (data.receipt.receipt_type && !['sale', 'refund', 'void', 'proforma'].includes(data.receipt.receipt_type)) {
+        errors.push(`Invalid receipt_type: ${data.receipt.receipt_type}`);
+      }
+
+      // Check timestamp format
+      if (data.receipt.issue_timestamp) {
+        try {
+          new Date(data.receipt.issue_timestamp);
+        } catch (e) {
+          errors.push('Invalid ISO 8601 timestamp format');
+        }
+      }
+    }
+
+    // Validate merchant
+    if (data.merchant) {
+      if (!data.merchant.legal_name) {
+        errors.push('Missing merchant.legal_name');
+      }
+      if (!data.merchant.country_code) {
+        errors.push('Missing merchant.country_code');
+      } else if (!/^[A-Z]{2}$/.test(data.merchant.country_code)) {
+        errors.push('merchant.country_code must be 2-letter ISO code');
+      }
+    }
+
+    // Validate line_items
+    if (data.line_items) {
+      if (!Array.isArray(data.line_items) || data.line_items.length === 0) {
+        errors.push('line_items must be a non-empty array');
+      } else {
+        data.line_items.forEach((item, idx) => {
+          const itemRequired = ['description', 'quantity', 'unit_price', 'line_total'];
+          itemRequired.forEach(field => {
+            if (item[field] === undefined) {
+              errors.push(`line_items[${idx}].${field} is required`);
+            }
+          });
+
+          // Check numeric fields
+          if (typeof item.quantity !== 'number' || item.quantity <= 0) {
+            errors.push(`line_items[${idx}].quantity must be a positive number`);
+          }
+          if (typeof item.unit_price !== 'number') {
+            errors.push(`line_items[${idx}].unit_price must be a number`);
+          }
+          if (typeof item.line_total !== 'number') {
+            errors.push(`line_items[${idx}].line_total must be a number`);
+          }
+        });
+      }
+    }
+
+    // Validate currency
+    if (data.currency && !/^[A-Z]{3}$/.test(data.currency)) {
+      errors.push('currency must be 3-letter ISO 4217 code');
+    }
+
+    // Validate total
+    if (typeof data.total !== 'number') {
+      errors.push('total must be a number');
+    }
+
+    // Check for jurisdiction-specific extensions
+    if (data.extensions) {
+      Object.keys(data.extensions).forEach(ext => {
+        if (jurisdictionRules[ext]) {
+          const rules = jurisdictionRules[ext];
+          const extData = data.extensions[ext];
+
+          // Check required fields
+          rules.required.forEach(field => {
+            if (!extData[field]) {
+              errors.push(`${ext}.${field} is required for this jurisdiction`);
+            }
+          });
+
+          // Check patterns
+          if (rules.patterns) {
+            Object.keys(rules.patterns).forEach(field => {
+              if (extData[field] && !rules.patterns[field].test(extData[field])) {
+                errors.push(`${ext}.${field} format is invalid`);
+              }
+            });
+          }
+
+          // Check enums
+          if (rules.enums) {
+            Object.keys(rules.enums).forEach(field => {
+              if (extData[field] && !rules.enums[field].includes(extData[field])) {
+                errors.push(`${ext}.${field} must be one of: ${rules.enums[field].join(', ')}`);
+              }
+            });
+          }
+
+          info.push(`Validated ${ext} jurisdiction extension`);
+        } else {
+          info.push(`Unknown extension: ${ext} (not validated)`);
+        }
+      });
+    }
+
+    // Calculate totals validation
+    if (data.line_items && Array.isArray(data.line_items) && data.total) {
+      const calculatedSubtotal = data.line_items.reduce((sum, item) => sum + (item.line_total || 0), 0);
+      const taxAmount = data.tax?.tax_lines?.reduce((sum, tax) => sum + (tax.tax_amount || 0), 0) || 0;
+      const expectedTotal = calculatedSubtotal + taxAmount;
+      
+      if (Math.abs(expectedTotal - data.total) > 0.01) {
+        warnings.push(`Total mismatch: calculated ${expectedTotal.toFixed(2)}, declared ${data.total.toFixed(2)}`);
+      }
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings,
+      info
+    };
+  };
+
+  const handleValidate = () => {
+    try {
+      const parsed = JSON.parse(jsonInput);
+      const result = validateORF(parsed);
+      setValidationResult(result);
+    } catch (e) {
+      setValidationResult({
+        valid: false,
+        errors: [`JSON Parse Error: ${e.message}`],
+        warnings: [],
+        info: []
+      });
+    }
+  };
+
+  const loadExample = (example) => {
+    const examples = {
+      minimal: {
+        orf_version: "0.1.0",
+        receipt: {
+          receipt_id: "MIN-2024-001",
+          issue_timestamp: "2024-12-28T09:15:30Z",
+          receipt_type: "sale"
+        },
+        merchant: {
+          legal_name: "The Coffee Shop",
+          country_code: "US"
+        },
+        line_items: [
+          {
+            description: "Cappuccino",
+            quantity: 1,
+            unit_price: 4.50,
+            line_total: 4.50
+          }
+        ],
+        total: 4.91,
+        currency: "USD"
+      },
+      mexico: {
+        orf_version: "0.1.0",
+        receipt: {
+          receipt_id: "ORF-MX-2024-001",
+          issue_timestamp: "2024-12-28T10:30:00-06:00",
+          receipt_type: "sale"
+        },
+        merchant: {
+          legal_name: "Tienda Demo S.A. de C.V.",
+          country_code: "MX",
+          tax_identifiers: [{ scheme: "RFC", value: "TDE920101AA1" }]
+        },
+        line_items: [{
+          description: "Laptop Dell",
+          quantity: 1,
+          unit_price: 12000.00,
+          line_total: 12000.00
+        }],
+        tax: {
+          tax_scheme: "MX_IVA",
+          tax_lines: [{
+            rate: 0.16,
+            base_amount: 12000.00,
+            tax_amount: 1920.00,
+            jurisdiction: "MX-FEDERAL"
+          }]
+        },
+        total: 13920.00,
+        currency: "MXN",
+        extensions: {
+          mx_cfdi: {
+            version: "4.0",
+            uuid: "550e8400-e29b-41d4-a716-446655440000",
+            pac_provider: "PAC-DEMO-SA",
+            sat_status: "VIGENTE"
+          }
+        }
+      }
+    };
+
+    setJsonInput(JSON.stringify(examples[example], null, 2));
+    setValidationResult(null);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(jsonInput);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <div className="flex items-center gap-3 mb-2">
+            <FileJson className="w-8 h-8 text-blue-600" />
+            <h1 className="text-3xl font-bold text-slate-800">ORF Validator</h1>
+          </div>
+          <p className="text-slate-600">
+            Validate Open Receipt Format (ORF) JSON against the schema and jurisdiction-specific rules
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Input Panel */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-slate-800">Input JSON</h2>
+              <button
+                onClick={copyToClipboard}
+                className="flex items-center gap-2 px-3 py-1 text-sm bg-slate-100 hover:bg-slate-200 rounded transition-colors"
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+
+            <div className="mb-4 flex flex-wrap gap-2">
+              <button
+                onClick={() => loadExample('minimal')}
+                className="px-3 py-1 text-sm bg-blue-100 hover:bg-blue-200 text-blue-700 rounded transition-colors"
+              >
+                Load Minimal Example
+              </button>
+              <button
+                onClick={() => loadExample('mexico')}
+                className="px-3 py-1 text-sm bg-green-100 hover:bg-green-200 text-green-700 rounded transition-colors"
+              >
+                Load Mexico CFDI Example
+              </button>
+            </div>
+
+            <textarea
+              value={jsonInput}
+              onChange={(e) => setJsonInput(e.target.value)}
+              placeholder='Paste your ORF JSON here...'
+              className="w-full h-96 p-4 font-mono text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            <button
+              onClick={handleValidate}
+              className="w-full mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+            >
+              Validate Receipt
+            </button>
+          </div>
+
+          {/* Results Panel */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-slate-800 mb-4">Validation Results</h2>
+
+            {!validationResult ? (
+              <div className="text-center py-12 text-slate-400">
+                <Info className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                <p>Enter JSON and click "Validate Receipt" to see results</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {/* Status Banner */}
+                <div className={`p-4 rounded-lg ${validationResult.valid ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                  <div className="flex items-center gap-3">
+                    {validationResult.valid ? (
+                      <CheckCircle className="w-6 h-6 text-green-600" />
+                    ) : (
+                      <AlertCircle className="w-6 h-6 text-red-600" />
+                    )}
+                    <div>
+                      <p className={`font-semibold ${validationResult.valid ? 'text-green-800' : 'text-red-800'}`}>
+                        {validationResult.valid ? 'Valid ORF Receipt' : 'Invalid ORF Receipt'}
+                      </p>
+                      <p className={`text-sm ${validationResult.valid ? 'text-green-600' : 'text-red-600'}`}>
+                        {validationResult.valid 
+                          ? 'All required fields present and valid'
+                          : `${validationResult.errors.length} error(s) found`
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Errors */}
+                {validationResult.errors.length > 0 && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-red-800 mb-2 flex items-center gap-2">
+                      <AlertCircle className="w-5 h-5" />
+                      Errors ({validationResult.errors.length})
+                    </h3>
+                    <ul className="space-y-1 text-sm text-red-700">
+                      {validationResult.errors.map((error, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="mt-1">•</span>
+                          <span>{error}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Warnings */}
+                {validationResult.warnings.length > 0 && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-yellow-800 mb-2 flex items-center gap-2">
+                      <AlertCircle className="w-5 h-5" />
+                      Warnings ({validationResult.warnings.length})
+                    </h3>
+                    <ul className="space-y-1 text-sm text-yellow-700">
+                      {validationResult.warnings.map((warning, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="mt-1">•</span>
+                          <span>{warning}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Info */}
+                {validationResult.info.length > 0 && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+                      <Info className="w-5 h-5" />
+                      Information ({validationResult.info.length})
+                    </h3>
+                    <ul className="space-y-1 text-sm text-blue-700">
+                      {validationResult.info.map((info, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="mt-1">•</span>
+                          <span>{info}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Supported Jurisdictions */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
+          <h2 className="text-xl font-semibold text-slate-800 mb-4">Supported Jurisdictions</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              { code: 'mx_cfdi', name: '🇲🇽 Mexico (CFDI)', status: 'Full support' },
+              { code: 'br_nfe', name: '🇧🇷 Brazil (NF-e)', status: 'Full support' },
+              { code: 'eu_vat', name: '🇪🇺 EU (VAT)', status: 'Full support' },
+              { code: 'us_sales_tax', name: '🇺🇸 US (Sales Tax)', status: 'Full support' },
+              { code: 'cn_fapiao', name: '🇨🇳 China (Fapiao)', status: 'Full support' },
+              { code: 'in_gst_einvoice', name: '🇮🇳 India (GST)', status: 'Full support' },
+              { code: 'jp_qualified_invoice', name: '🇯🇵 Japan', status: 'Full support' },
+              { code: 'au_tax_invoice', name: '🇦🇺 Australia', status: 'Full support' },
+              { code: 'kr_etax_invoice', name: '🇰🇷 South Korea', status: 'Full support' }
+            ].map((juris) => (
+              <div key={juris.code} className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <p className="font-semibold text-slate-800">{juris.name}</p>
+                <p className="text-sm text-green-600">{juris.status}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ORFValidator;
