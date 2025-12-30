@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Receipt Format (ORF) Specification v1.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .markdown-content h1 { @apply text-4xl font-bold text-slate-900 mb-6; }
+        .markdown-content h2 { @apply text-3xl font-bold text-slate-800 mt-8 mb-4; }
+        .markdown-content h3 { @apply text-2xl font-semibold text-slate-700 mt-6 mb-3; }
+        .markdown-content h4 { @apply text-xl font-semibold text-slate-600 mt-4 mb-2; }
+        .markdown-content p { @apply text-slate-600 leading-relaxed mb-4; }
+        .markdown-content ul { @apply list-disc list-inside text-slate-600 mb-4 space-y-1; }
+        .markdown-content ol { @apply list-decimal list-inside text-slate-600 mb-4 space-y-1; }
+        .markdown-content li { @apply mb-1; }
+        .markdown-content strong { @apply font-semibold text-slate-800; }
+        .markdown-content code { @apply bg-slate-100 px-2 py-1 rounded text-sm font-mono text-slate-800; }
+        .markdown-content pre { @apply bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4; }
+        .markdown-content pre code { @apply bg-transparent p-0 text-slate-100; }
+        .markdown-content blockquote { @apply border-l-4 border-blue-500 pl-4 italic text-slate-600 mb-4; }
+        .markdown-content table { @apply w-full border-collapse border border-slate-300 mb-4; }
+        .markdown-content th, .markdown-content td { @apply border border-slate-300 px-4 py-2 text-left; }
+        .markdown-content th { @apply bg-slate-100 font-semibold; }
+        .toc-link { @apply text-blue-600 hover:text-blue-800 transition-colors; }
+        .header-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">ORF</span>
+                    </div>
+                    <span class="text-xl font-bold text-slate-800">Open Receipt Format</span>
+                </div>
+                <div class="hidden md:flex gap-6">
+                    <a href="../landing_page.html" class="text-slate-600 hover:text-blue-600 transition-colors">Home</a>
+                    <a href="../tools/validator/" class="text-slate-600 hover:text-blue-600 transition-colors">Validator</a>
+                    <a href="https://github.com/openreceiptformat/orf-spec" class="text-slate-600 hover:text-blue-600 transition-colors">
+                        GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="header-gradient text-white py-16">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <img width="120" height="120" alt="ORF Icon" src="https://github.com/user-attachments/assets/e655fee8-1d4d-4e62-863b-bf42b58ab087" class="mx-auto mb-6 rounded-full shadow-lg" />
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">Open Receipt Format</h1>
+            <p class="text-xl text-blue-100 mb-6">Specification v1.0</p>
+            <div class="flex gap-4 justify-center flex-wrap">
+                <span class="bg-white/20 px-4 py-2 rounded-full text-sm font-semibold">Version 1.0</span>
+                <span class="bg-white/20 px-4 py-2 rounded-full text-sm font-semibold">Draft</span>
+                <span class="bg-white/20 px-4 py-2 rounded-full text-sm font-semibold">Last Updated: 2024-12-28</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="grid lg:grid-cols-4 gap-8">
+            <!-- Table of Contents -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm p-6 sticky top-24">
+                    <h3 class="font-bold text-slate-800 mb-4">Table of Contents</h3>
+                    <nav class="space-y-2 text-sm">
+                        <a href="#introduction" class="toc-link block">Introduction</a>
+                        <a href="#design-principles" class="toc-link block">Design Principles</a>
+                        <a href="#core-schema" class="toc-link block">Core Schema</a>
+                        <a href="#field-definitions" class="toc-link block">Field Definitions</a>
+                        <a href="#implementation-guidelines" class="toc-link block">Implementation Guidelines</a>
+                        <a href="#security-considerations" class="toc-link block">Security Considerations</a>
+                        <a href="#examples" class="toc-link block">Examples</a>
+                        <a href="#versioning" class="toc-link block">Versioning</a>
+                        <a href="#license" class="toc-link block">License</a>
+                        <a href="#changelog" class="toc-link block">Changelog</a>
+                        <a href="#contributors" class="toc-link block">Contributors</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-lg shadow-sm p-8">
+                    <div class="markdown-content">
+                        <section id="introduction">
+                            <h2>Introduction</h2>
+                            <p>The Open Receipt Format (ORF) is a standardized, JSON-based format for digital receipts. It enables interoperability between merchants, point-of-sale systems, and consumer applications while respecting user privacy.</p>
+                            
+                            <h3>Goals</h3>
+                            <ul>
+                                <li>Eliminate paper receipt waste</li>
+                                <li>Provide structured, machine-readable transaction data</li>
+                                <li>Enable privacy-preserving receipt storage</li>
+                                <li>Support merchant innovation (loyalty, analytics, etc.)</li>
+                            </ul>
+
+                            <h3>Non-Goals</h3>
+                            <ul>
+                                <li>Payment processing (handled by existing rails)</li>
+                                <li>User authentication (receipts are bearer tokens)</li>
+                                <li>Regulatory compliance (region-specific requirements handled separately)</li>
+                            </ul>
+                        </section>
+
+                        <section id="design-principles">
+                            <h2>Design Principles</h2>
+                            <ol>
+                                <li><strong>Privacy-first</strong>: No required user identifiers</li>
+                                <li><strong>Merchant-friendly</strong>: Easy to generate from existing POS data</li>
+                                <li><strong>Extensible</strong>: Support future features without breaking changes</li>
+                                <li><strong>Human-readable</strong>: JSON format, sensible field names</li>
+                                <li><strong>Minimal</strong>: Required fields only; everything else optional</li>
+                            </ol>
+                        </section>
+
+                        <section id="core-schema">
+                            <h2>Core Schema</h2>
+                            <h3>Minimal Valid ORF Receipt</h3>
+                            <pre><code class="language-json">{
+  "orf_version": "1.0",
+  "receipt": {
+    "receipt_id": "MIN-2024-001",
+    "issue_timestamp": "2024-12-28T09:15:30Z",
+    "receipt_type": "sale"
+  },
+  "merchant": {
+    "legal_name": "The Coffee Shop",
+    "country_code": "US"
+  },
+  "line_items": [
+    {
+      "description": "Cappuccino",
+      "quantity": 1,
+      "unit_price": 4.50,
+      "line_total": 4.50
+    }
+  ],
+  "total": 4.91,
+  "currency": "USD"
+}</code></pre>
+                        </section>
+
+                        <section id="field-definitions">
+                            <h2>Field Definitions</h2>
+                            
+                            <h3>receipt_id (required)</h3>
+                            <ul>
+                                <li><strong>Type</strong>: String</li>
+                                <li><strong>Description</strong>: Unique identifier for this receipt</li>
+                                <li><strong>Format</strong>: UUID recommended, but any unique string accepted</li>
+                                <li><strong>Example</strong>: <code>"a3f2b1c0-9d7e-4f5a-b8c2-1e3d4f5a6b7c"</code></li>
+                            </ul>
+
+                            <h3>orf_version (required)</h3>
+                            <ul>
+                                <li><strong>Type</strong>: String</li>
+                                <li><strong>Description</strong>: Version of ORF spec this receipt follows</li>
+                                <li><strong>Format</strong>: Semantic versioning (major.minor)</li>
+                                <li><strong>Example</strong>: <code>"1.0"</code></li>
+                            </ul>
+
+                            <h3>merchant.legal_name (required)</h3>
+                            <ul>
+                                <li><strong>Type</strong>: String</li>
+                                <li><strong>Description</strong>: Human-readable merchant name</li>
+                                <li><strong>Example</strong>: <code>"The Coffee Shop"</code></li>
+                            </ul>
+
+                            <h3>receipt.issue_timestamp (required)</h3>
+                            <ul>
+                                <li><strong>Type</strong>: String</li>
+                                <li><strong>Format</strong>: ISO 8601 with timezone</li>
+                                <li><strong>Example</strong>: <code>"2024-12-28T14:30:00-08:00"</code></li>
+                            </ul>
+
+                            <h3>currency (required)</h3>
+                            <ul>
+                                <li><strong>Type</strong>: String</li>
+                                <li><strong>Format</strong>: ISO 4217 currency code</li>
+                                <li><strong>Example</strong>: <code>"USD"</code>, <code>"EUR"</code>, <code>"GBP"</code></li>
+                            </ul>
+
+                            <h3>line_items[].quantity (required)</h3>
+                            <ul>
+                                <li><strong>Type</strong>: Number</li>
+                                <li><strong>Description</strong>: Quantity of this item purchased</li>
+                                <li><strong>Note</strong>: Can be decimal for weight-based items (e.g., 0.5 kg)</li>
+                            </ul>
+
+                            <h3>total (required)</h3>
+                            <ul>
+                                <li><strong>Type</strong>: Number</li>
+                                <li><strong>Format</strong>: Decimal number, two decimal places recommended</li>
+                                <li><strong>Note</strong>: <code>subtotal + tax + tip - discount = total</code></li>
+                            </ul>
+                        </section>
+
+                        <section id="implementation-guidelines">
+                            <h2>Implementation Guidelines</h2>
+                            
+                            <h3>For POS Systems</h3>
+                            <p><strong>Generating ORF receipts:</strong></p>
+                            <ol>
+                                <li>After transaction completion, serialize transaction data to ORF JSON</li>
+                                <li>Assign unique <code>receipt_id</code> (UUID recommended)</li>
+                                <li>Include all available data, but only required fields are mandatory</li>
+                                <li>Make receipt available via:
+                                    <ul>
+                                        <li>NFC tag (NDEF format)</li>
+                                        <li>QR code (URL pointing to receipt endpoint)</li>
+                                        <li>API endpoint for programmatic access</li>
+                                        <li>Email/SMS with embedded JSON or link</li>
+                                    </ul>
+                                </li>
+                            </ol>
+
+                            <p><strong>Storage recommendations:</strong></p>
+                            <ul>
+                                <li>Retain receipts for minimum 90 days</li>
+                                <li>Longer retention for high-value items</li>
+                                <li>Comply with local data retention laws</li>
+                            </ul>
+
+                            <h3>For Consumer Applications</h3>
+                            <p><strong>Parsing ORF receipts:</strong></p>
+                            <ol>
+                                <li>Validate <code>orf_version</code> is supported (currently only "1.0")</li>
+                                <li>Check all required fields are present</li>
+                                <li>Gracefully handle unknown fields (forward compatibility)</li>
+                                <li>Store locally by default (privacy preservation)</li>
+                                <li>Validate currency codes, country codes against standards</li>
+                            </ol>
+
+                            <p><strong>Storage recommendations:</strong></p>
+                            <ul>
+                                <li>Store receipts in local database or file system</li>
+                                <li>Use <code>receipt_id</code> as primary key</li>
+                                <li>Index by timestamp, merchant, total for quick retrieval</li>
+                                <li>Implement search across items, merchants, categories</li>
+                            </ul>
+                        </section>
+
+                        <section id="security-considerations">
+                            <h2>Security Considerations</h2>
+                            
+                            <h3>Privacy</h3>
+                            <ul>
+                                <li>No Personally Identifiable Information (PII) required in base format</li>
+                                <li><code>receipt_id</code> should not be derivable from transaction details</li>
+                                <li>Payment details should be minimal (last 4 digits only)</li>
+                                <li>Merchants should not embed tracking identifiers</li>
+                            </ul>
+
+                            <h3>Transmission</h3>
+                            <ul>
+                                <li>Use HTTPS for any API endpoints serving receipts</li>
+                                <li>Consider encryption for NFC transmission (though typically short-range is sufficient)</li>
+                                <li>Implement rate limiting on receipt retrieval endpoints</li>
+                            </ul>
+
+                            <h3>Authenticity</h3>
+                            <ul>
+                                <li>Consider digital signatures for high-value receipts</li>
+                                <li>Use HMAC or JWT for receipt authenticity verification</li>
+                                <li>Merchant certificates could validate receipt origin</li>
+                            </ul>
+                        </section>
+
+                        <section id="examples">
+                            <h2>Examples</h2>
+                            <p>See the examples directory for complete receipt samples:</p>
+                            <ul>
+                                <li><a href="examples/coffee-shop.json" class="text-blue-600 hover:text-blue-800">coffee-shop.json</a> - Simple transaction</li>
+                                <li><a href="examples/restaurant.json" class="text-blue-600 hover:text-blue-800">restaurant.json</a> - With tip and modifiers</li>
+                                <li><a href="examples/retail.json" class="text-blue-600 hover:text-blue-800">retail.json</a> - With return policy</li>
+                            </ul>
+                        </section>
+
+                        <section id="versioning">
+                            <h2>Versioning</h2>
+                            <p>ORF uses semantic versioning:</p>
+                            <ul>
+                                <li><strong>Major version</strong> (1.x): Breaking changes, old parsers won't work</li>
+                                <li><strong>Minor version</strong> (x.0): New optional fields, backward compatible</li>
+                            </ul>
+                        </section>
+
+                        <section id="license">
+                            <h2>License</h2>
+                            <p>This specification is released under CC0 1.0 Universal. Anyone may implement without restriction.</p>
+                        </section>
+
+                        <section id="changelog">
+                            <h2>Changelog</h2>
+                            <ul>
+                                <li><strong>v1.0 (2024-12-28)</strong>: Initial draft release</li>
+                            </ul>
+                        </section>
+
+                        <section id="contributors">
+                            <h2>Contributors</h2>
+                            <ul>
+                                <li>Mike Aguilar - Founder & Spec Lead</li>
+                                <li>[Contributors will be listed as they join]</li>
+                            </ul>
+                        </section>
+
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+                            <h3 class="font-bold text-blue-800 mb-2">Questions?</h3>
+                            <p class="text-blue-700">Open an issue or start a discussion on <a href="https://github.com/openreceiptformat/orf-spec" class="font-semibold hover:underline">GitHub</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-300 py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>Released under CC0 1.0 Universal • No restrictions, no attribution required</p>
+            <p class="mt-2 text-slate-500">Open Receipt Format Specification v1.0</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <!-- Smooth scrolling for TOC links -->
+    <script>
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
