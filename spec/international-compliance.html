@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORF International Compliance Mapping</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .markdown-content h1 { @apply text-4xl font-bold text-slate-900 mb-6; }
+        .markdown-content h2 { @apply text-3xl font-bold text-slate-800 mt-8 mb-4; }
+        .markdown-content h3 { @apply text-2xl font-semibold text-slate-700 mt-6 mb-3; }
+        .markdown-content h4 { @apply text-xl font-semibold text-slate-600 mt-4 mb-2; }
+        .markdown-content p { @apply text-slate-600 leading-relaxed mb-4; }
+        .markdown-content ul { @apply list-disc list-inside text-slate-600 mb-4 space-y-1; }
+        .markdown-content ol { @apply list-decimal list-inside text-slate-600 mb-4 space-y-1; }
+        .markdown-content li { @apply mb-1; }
+        .markdown-content strong { @apply font-semibold text-slate-800; }
+        .markdown-content code { @apply bg-slate-100 px-2 py-1 rounded text-sm font-mono text-slate-800; }
+        .markdown-content pre { @apply bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4; }
+        .markdown-content pre code { @apply bg-transparent p-0 text-slate-100; }
+        .markdown-content blockquote { @apply border-l-4 border-blue-500 pl-4 italic text-slate-600 mb-4; }
+        .markdown-content table { @apply w-full border-collapse border border-slate-300 mb-4; }
+        .markdown-content th, .markdown-content td { @apply border border-slate-300 px-4 py-2 text-left; }
+        .markdown-content th { @apply bg-slate-100 font-semibold; }
+        .toc-link { @apply text-blue-600 hover:text-blue-800 transition-colors; }
+        .header-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .jurisdiction-card { @apply bg-white border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow; }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">ORF</span>
+                    </div>
+                    <span class="text-xl font-bold text-slate-800">Open Receipt Format</span>
+                </div>
+                <div class="hidden md:flex gap-6">
+                    <a href="../landing_page.html" class="text-slate-600 hover:text-blue-600 transition-colors">Home</a>
+                    <a href="ORF-v1.0.html" class="text-slate-600 hover:text-blue-600 transition-colors">Specification</a>
+                    <a href="../tools/validator/" class="text-slate-600 hover:text-blue-600 transition-colors">Validator</a>
+                    <a href="https://github.com/openreceiptformat/orf-spec" class="text-slate-600 hover:text-blue-600 transition-colors">
+                        GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="header-gradient text-white py-16">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">International Compliance Mapping</h1>
+            <p class="text-xl text-blue-100 mb-6">ORF Jurisdiction Support Guide</p>
+            <div class="flex gap-4 justify-center flex-wrap">
+                <span class="bg-white/20 px-4 py-2 rounded-full text-sm font-semibold">Version 0.1.0</span>
+                <span class="bg-white/20 px-4 py-2 rounded-full text-sm font-semibold">Living Document</span>
+                <span class="bg-white/20 px-4 py-2 rounded-full text-sm font-semibold">Last Updated: 2024-12-28</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="grid lg:grid-cols-4 gap-8">
+            <!-- Table of Contents -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm p-6 sticky top-24">
+                    <h3 class="font-bold text-slate-800 mb-4">Table of Contents</h3>
+                    <nav class="space-y-2 text-sm">
+                        <a href="#overview" class="toc-link block">Overview</a>
+                        <a href="#design-principles" class="toc-link block">Design Principles</a>
+                        <a href="#jurisdiction-mappings" class="toc-link block">Jurisdiction Mappings</a>
+                        <div class="ml-4 space-y-1">
+                            <a href="#mexico-cfdi" class="toc-link block text-xs">🇲🇽 Mexico - CFDI</a>
+                            <a href="#brazil-nfe" class="toc-link block text-xs">🇧🇷 Brazil - NF-e/NFC-e</a>
+                            <a href="#eu-vat" class="toc-link block text-xs">🇪🇺 EU - VAT Directive</a>
+                            <a href="#us-sales-tax" class="toc-link block text-xs">🇺🇸 United States</a>
+                            <a href="#china-fapiao" class="toc-link block text-xs">🇨🇳 China - Fapiao</a>
+                            <a href="#india-gst" class="toc-link block text-xs">🇮🇳 India - GST e-Invoice</a>
+                            <a href="#japan-qualified" class="toc-link block text-xs">🇯🇵 Japan - Qualified Invoice</a>
+                            <a href="#australia-tax" class="toc-link block text-xs">🇦🇺 Australia - Tax Invoice</a>
+                            <a href="#korea-etax" class="toc-link block text-xs">🇰🇷 South Korea - E-Tax</a>
+                        </div>
+                        <a href="#multi-jurisdiction-example" class="toc-link block">Multi-Jurisdiction Example</a>
+                        <a href="#implementation-guidelines" class="toc-link block">Implementation Guidelines</a>
+                        <a href="#future-jurisdictions" class="toc-link block">Future Jurisdictions</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-lg shadow-sm p-8">
+                    <div class="markdown-content">
+                        <section id="overview">
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6">
+                                <h2>Overview</h2>
+                                <p>The Open Receipt Format (ORF) is designed to <strong>coexist with</strong> and <strong>augment</strong> national and regional fiscal receipt standards rather than replace them. ORF provides a canonical, extensible container capable of embedding or referencing jurisdiction-mandated documents while preserving their legal integrity.</p>
+                                
+                                <div class="bg-white rounded-lg p-4 mt-4 border border-blue-200">
+                                    <h3 class="font-bold text-blue-800 mb-2">Key Principles</h3>
+                                    <p class="text-blue-700"><strong>ORF does not replace fiscal systems.</strong> Instead:</p>
+                                    <ul class="text-blue-600 mt-2 space-y-1">
+                                        <li>• Fiscal documents live in the <code>extensions</code> object</li>
+                                        <li>• Legal documents maintain their original format (XML, JSON, etc.)</li>
+                                        <li>• ORF provides human-readable access and app interoperability</li>
+                                        <li>• Merchants continue to comply with local tax laws</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="design-principles">
+                            <h2>Design Principles</h2>
+                            
+                            <div class="grid gap-6 mt-6">
+                                <div class="jurisdiction-card">
+                                    <h3 class="text-lg font-semibold text-purple-800 mb-3">1. Non-Invasive Integration</h3>
+                                    <p class="text-slate-600">ORF does not modify legally-mandated formats. The original fiscal document (CFDI XML, NF-e XML, etc.) remains the source of truth.</p>
+                                </div>
+                                
+                                <div class="jurisdiction-card">
+                                    <h3 class="text-lg font-semibold text-blue-800 mb-3">2. Container Pattern</h3>
+                                    <p class="text-slate-600">Jurisdiction-specific data lives in <code>extensions.{jurisdiction_code}</code>, keeping the core ORF schema clean and universal.</p>
+                                </div>
+                                
+                                <div class="jurisdiction-card">
+                                    <h3 class="text-lg font-semibold text-green-800 mb-3">3. Reference by ID</h3>
+                                    <p class="text-slate-600">When full embedding isn't practical, ORF can reference external fiscal documents via URLs or unique identifiers.</p>
+                                </div>
+                                
+                                <div class="jurisdiction-card">
+                                    <h3 class="text-lg font-semibold text-orange-800 mb-3">4. Multi-Jurisdiction Support</h3>
+                                    <p class="text-slate-600">A single ORF receipt can reference multiple tax systems simultaneously for international transactions.</p>
+                                </div>
+                                
+                                <div class="jurisdiction-card">
+                                    <h3 class="text-lg font-semibold text-red-800 mb-3">5. Forward Compatibility</h3>
+                                    <p class="text-slate-600">New jurisdictions can be added without breaking existing implementations.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="jurisdiction-mappings">
+                            <h2>Jurisdiction Mappings</h2>
+                            
+                            <!-- Mexico CFDI -->
+                            <div id="mexico-cfdi" class="jurisdiction-card mt-6">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">🇲🇽 Mexico - CFDI</h3>
+                                <p class="text-sm text-slate-500 mb-4"><strong>Comprobante Fiscal Digital por Internet</strong></p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Legal Context</h4>
+                                        <p class="text-slate-600 text-sm">All invoices in Mexico must be XML documents stamped by authorized PAC (Proveedor Autorizado de Certificación) providers and submitted to SAT (Servicio de Administración Tributaria).</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Key Requirements</h4>
+                                        <ul class="text-slate-600 text-sm space-y-1">
+                                            <li>• <strong>RFC</strong>: Tax identification number (12-13 characters)</li>
+                                            <li>• <strong>UUID</strong>: Unique folio fiscal assigned by PAC</li>
+                                            <li>• <strong>PAC Stamp</strong>: Digital signature from authorized provider</li>
+                                            <li>• <strong>SAT Verification</strong>: Status must be "VIGENTE" (valid)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-50 rounded-lg p-4 mt-4">
+                                    <h4 class="font-semibold text-slate-700 mb-2">ORF Integration Strategy</h4>
+                                    <p class="text-slate-600 text-sm">Embed CFDI UUID and verification metadata in <code>extensions.mx_cfdi</code>. The CFDI XML remains the legal document and must be available via URL.</p>
+                                </div>
+                            </div>
+
+                            <!-- Brazil NF-e -->
+                            <div id="brazil-nfe" class="jurisdiction-card mt-6">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">🇧🇷 Brazil - NF-e/NFC-e</h3>
+                                <p class="text-sm text-slate-500 mb-4"><strong>Nota Fiscal Eletrônica / Nota Fiscal de Consumidor Eletrônica</strong></p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Legal Context</h4>
+                                        <p class="text-slate-600 text-sm">Electronic invoices must be authorized by SEFAZ (Secretaria da Fazenda) state tax authority and contain a 44-digit access key (chave de acesso).</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Key Requirements</h4>
+                                        <ul class="text-slate-600 text-sm space-y-1">
+                                            <li>• <strong>CNPJ</strong>: Corporate tax ID (14 digits)</li>
+                                            <li>• <strong>CPF</strong>: Individual tax ID (11 digits) for B2C</li>
+                                            <li>• <strong>Access Key</strong>: 44-digit unique identifier</li>
+                                            <li>• <strong>Authorization Protocol</strong>: 15-digit SEFAZ approval number</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-50 rounded-lg p-4 mt-4">
+                                    <h4 class="font-semibold text-slate-700 mb-2">ORF Integration Strategy</h4>
+                                    <p class="text-slate-600 text-sm">Embed NF-e access key and authorization metadata in <code>extensions.br_nfe</code>. The NF-e XML is the legal document.</p>
+                                </div>
+                            </div>
+
+                            <!-- EU VAT -->
+                            <div id="eu-vat" class="jurisdiction-card mt-6">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">🇪🇺 European Union - VAT Directive</h3>
+                                <p class="text-sm text-slate-500 mb-4"><strong>Value Added Tax Compliance (Directive 2006/112/EC)</strong></p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Legal Context</h4>
+                                        <p class="text-slate-600 text-sm">VAT-registered businesses must issue invoices containing specific fields including VAT identification numbers and tax breakdowns by rate.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Key Requirements</h4>
+                                        <ul class="text-slate-600 text-sm space-y-1">
+                                            <li>• <strong>VAT Number</strong>: Format varies by member state</li>
+                                            <li>• <strong>Tax Breakdown</strong>: Separate totals for each VAT rate</li>
+                                            <li>• <strong>Reverse Charge</strong>: Indicator for B2B cross-border supplies</li>
+                                            <li>• <strong>Intra-Community Supply</strong>: Special treatment for EU B2B</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-50 rounded-lg p-4 mt-4">
+                                    <h4 class="font-semibold text-slate-700 mb-2">ORF Integration Strategy</h4>
+                                    <p class="text-slate-600 text-sm">Embed VAT-specific requirements in <code>extensions.eu_vat</code>. Member state determines additional requirements.</p>
+                                </div>
+                            </div>
+
+                            <!-- US Sales Tax -->
+                            <div id="us-sales-tax" class="jurisdiction-card mt-6">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">🇺🇸 United States - Sales Tax</h3>
+                                <p class="text-sm text-slate-500 mb-4"><strong>State and Local Sales Tax</strong></p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Legal Context</h4>
+                                        <p class="text-slate-600 text-sm">Sales tax varies by state and locality. No federal sales tax. Requirements differ by state; some require nexus determination.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Key Requirements</h4>
+                                        <ul class="text-slate-600 text-sm space-y-1">
+                                            <li>• <strong>EIN</strong>: Employer Identification Number (federal)</li>
+                                            <li>• <strong>State Tax ID</strong>: State-specific registration number</li>
+                                            <li>• <strong>Nexus</strong>: Physical or economic presence in state</li>
+                                            <li>• <strong>Jurisdiction Codes</strong>: For multi-tier taxation</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-50 rounded-lg p-4 mt-4">
+                                    <h4 class="font-semibold text-slate-700 mb-2">ORF Integration Strategy</h4>
+                                    <p class="text-slate-600 text-sm">Embed state-specific tax information in <code>extensions.us_sales_tax</code>. Support multi-tier tax breakdown.</p>
+                                </div>
+                            </div>
+
+                            <!-- China Fapiao -->
+                            <div id="china-fapiao" class="jurisdiction-card mt-6">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">🇨🇳 China - Fapiao</h3>
+                                <p class="text-sm text-slate-500 mb-4"><strong>发票 (Invoice) - Golden Tax System</strong></p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Legal Context</h4>
+                                        <p class="text-slate-600 text-sm">All invoices must be issued through the Golden Tax System and contain unique Fapiao code and number. VAT Fapiaos require tax authority verification.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Key Requirements</h4>
+                                        <ul class="text-slate-600 text-sm space-y-1">
+                                            <li>• <strong>USCC</strong>: Unified Social Credit Code (18 characters)</li>
+                                            <li>• <strong>Fapiao Code</strong>: 10-digit invoice code</li>
+                                            <li>• <strong>Fapiao Number</strong>: 8-digit sequential number</li>
+                                            <li>• <strong>Verification Code</strong>: 20-digit code for validation</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-50 rounded-lg p-4 mt-4">
+                                    <h4 class="font-semibold text-slate-700 mb-2">ORF Integration Strategy</h4>
+                                    <p class="text-slate-600 text-sm">Embed Fapiao verification data in <code>extensions.cn_fapiao</code>. Different types for different use cases.</p>
+                                </div>
+                            </div>
+
+                            <!-- India GST -->
+                            <div id="india-gst" class="jurisdiction-card mt-6">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">🇮🇳 India - GST e-Invoice</h3>
+                                <p class="text-sm text-slate-500 mb-4"><strong>Goods and Services Tax Electronic Invoice</strong></p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Legal Context</h4>
+                                        <p class="text-slate-600 text-sm">B2B invoices above certain thresholds must be registered on the Invoice Registration Portal (IRP) and receive an Invoice Reference Number (IRN) with QR code.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Key Requirements</h4>
+                                        <ul class="text-slate-600 text-sm space-y-1">
+                                            <li>• <strong>GSTIN</strong>: 15-character GST Identification Number</li>
+                                            <li>• <strong>IRN</strong>: 64-character hexadecimal unique identifier</li>
+                                            <li>• <strong>Acknowledgement Number</strong>: 15-digit IRP confirmation</li>
+                                            <li>• <strong>HSN Code</strong>: Harmonized System of Nomenclature code</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-50 rounded-lg p-4 mt-4">
+                                    <h4 class="font-semibold text-slate-700 mb-2">ORF Integration Strategy</h4>
+                                    <p class="text-slate-600 text-sm">Embed GST e-Invoice data in <code>extensions.in_gst_einvoice</code>. IRN enables real-time verification.</p>
+                                </div>
+                            </div>
+
+                            <!-- Japan Qualified Invoice -->
+                            <div id="japan-qualified" class="jurisdiction-card mt-6">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">🇯🇵 Japan - Qualified Invoice</h3>
+                                <p class="text-sm text-slate-500 mb-4"><strong>適格請求書 (Tekikaku Seikyūsho)</strong></p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Legal Context</h4>
+                                        <p class="text-slate-600 text-sm">From October 2023, Qualified Invoice Issuer Registration Number required for input tax credit under consumption tax system.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Key Requirements</h4>
+                                        <ul class="text-slate-600 text-sm space-y-1">
+                                            <li>• <strong>Registration Number</strong>: T + 13 digits (corporate number)</li>
+                                            <li>• <strong>Two Tax Rates</strong>: 10% standard, 8% reduced</li>
+                                            <li>• <strong>Clear Breakdown</strong>: Separate totals for each rate</li>
+                                            <li>• <strong>Simplified Format</strong>: Allowed for retail/restaurants</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-50 rounded-lg p-4 mt-4">
+                                    <h4 class="font-semibold text-slate-700 mb-2">ORF Integration Strategy</h4>
+                                    <p class="text-slate-600 text-sm">Embed Qualified Invoice data in <code>extensions.jp_qualified_invoice</code>. Support both full and simplified formats.</p>
+                                </div>
+                            </div>
+
+                            <!-- Australia Tax Invoice -->
+                            <div id="australia-tax" class="jurisdiction-card mt-6">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">🇦🇺 Australia - Tax Invoice</h3>
+                                <p class="text-sm text-slate-500 mb-4"><strong>Goods and Services Tax (GST) Tax Invoice</strong></p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Legal Context</h4>
+                                        <p class="text-slate-600 text-sm">GST-registered businesses must issue tax invoices for sales over A$82.50 (including GST). Must include ABN and "Tax Invoice" notation for amounts over A$1,000.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Key Requirements</h4>
+                                        <ul class="text-slate-600 text-sm space-y-1">
+                                            <li>• <strong>ABN</strong>: 11-digit Australian Business Number</li>
+                                            <li>• <strong>ACN</strong>: Australian Company Number (optional)</li>
+                                            <li>• <strong>GST Amount</strong>: Must be clearly stated</li>
+                                            <li>• <strong>"Tax Invoice" Words</strong>: Required for invoices over A$1,000</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-50 rounded-lg p-4 mt-4">
+                                    <h4 class="font-semibold text-slate-700 mb-2">ORF Integration Strategy</h4>
+                                    <p class="text-slate-600 text-sm">Embed Australian tax invoice requirements in <code>extensions.au_tax_invoice</code>. Support GST-free and input-taxed supplies.</p>
+                                </div>
+                            </div>
+
+                            <!-- South Korea E-Tax -->
+                            <div id="korea-etax" class="jurisdiction-card mt-6">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-4">🇰🇷 South Korea - E-Tax Invoice</h3>
+                                <p class="text-sm text-slate-500 mb-4"><strong>전자세금계산서 (Electronic Tax Invoice)</strong></p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Legal Context</h4>
+                                        <p class="text-slate-600 text-sm">VAT-registered businesses must issue electronic tax invoices through National Tax Service (국세청) approved systems.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-700 mb-2">Key Requirements</h4>
+                                        <ul class="text-slate-600 text-sm space-y-1">
+                                            <li>• <strong>Business Registration Number</strong>: 10 digits (###-##-#####)</li>
+                                            <li>• <strong>NTS Approval Number</strong>: Issued after electronic transmission</li>
+                                            <li>• <strong>Receipt Confirmation</strong>: Buyer must confirm within 24 hours</li>
+                                            <li>• <strong>Business Type/Item</strong>: Industry classification required</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-slate-50 rounded-lg p-4 mt-4">
+                                    <h4 class="font-semibold text-slate-700 mb-2">ORF Integration Strategy</h4>
+                                    <p class="text-slate-600 text-sm">Embed Korean e-tax invoice data in <code>extensions.kr_etax_invoice</code>. Track confirmation status.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="multi-jurisdiction-example">
+                            <h2>Multi-Jurisdiction Example</h2>
+                            <p class="mb-4"><strong>Scenario:</strong> A global merchant operating in multiple countries issues a single receipt that complies with various tax systems simultaneously.</p>
+                            <pre><code class="language-json">{
+  "orf_version": "0.1.0",
+  "receipt": {
+    "receipt_id": "ORF-GLOBAL-2024-001",
+    "issue_timestamp": "2024-12-28T12:00:00Z",
+    "receipt_type": "sale"
+  },
+  "merchant": {
+    "legal_name": "Global eCommerce Ltd.",
+    "country_code": "GB",
+    "tax_identifiers": [
+      { "scheme": "EU_VAT", "value": "GB123456789" },
+      { "scheme": "US_EIN", "value": "98-7654321" },
+      { "scheme": "BR_CNPJ", "value": "12.345.678/0001-90" }
+    ]
+  },
+  "customer": {
+    "legal_name": "International Corp.",
+    "tax_identifiers": [
+      { "scheme": "EU_VAT", "value": "DE987654321" }
+    ]
+  },
+  "line_items": [
+    {
+      "description": "Cloud Services - Annual Subscription",
+      "quantity": 1,
+      "unit_price": 10000.00,
+      "line_total": 10000.00
+    }
+  ],
+  "tax": {
+    "tax_scheme": "MULTI",
+    "tax_lines": [
+      {
+        "rate": 0.20,
+        "base_amount": 10000.00,
+        "tax_amount": 2000.00,
+        "jurisdiction": "GB-VAT"
+      }
+    ]
+  },
+  "total": 12000.00,
+  "currency": "USD",
+  "extensions": {
+    "eu_vat": {
+      "member_state": "GB",
+      "reverse_charge": true,
+      "invoice_type": "COMMERCIAL_INVOICE",
+      "intra_community_supply": false
+    },
+    "us_sales_tax": {
+      "state": "CA",
+      "nexus": false,
+      "note": "Digital service - not subject to CA sales tax per current regulations"
+    },
+    "br_nfe": {
+      "note": "Service delivered outside Brazil - NF-e not applicable"
+    }
+  }
+}</code></pre>
+                        </section>
+
+                        <section id="implementation-guidelines">
+                            <h2>Implementation Guidelines</h2>
+                            
+                            <div class="grid md:grid-cols-3 gap-6 mt-6">
+                                <div class="jurisdiction-card">
+                                    <h3 class="text-lg font-semibold text-blue-800 mb-4">For POS Vendors</h3>
+                                    <ol class="text-slate-600 text-sm space-y-2">
+                                        <li><strong>1. Generate Both Formats</strong><br>Create jurisdiction-required document (CFDI XML, NF-e XML, etc.) AND ORF JSON in parallel.</li>
+                                        <li><strong>2. Embed References</strong><br>Include links/IDs to official documents in <code>extensions</code>. Never replace legal formats.</li>
+                                        <li><strong>3. Support Multi-Jurisdiction</strong><br>Allow multiple <code>extensions</code> objects to coexist for international businesses.</li>
+                                        <li><strong>4. Provide Validation</strong><br>Validate against both ORF core schema and jurisdiction-specific rules before issuing.</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="jurisdiction-card">
+                                    <h3 class="text-lg font-semibold text-green-800 mb-4">For App Developers</h3>
+                                    <ol class="text-slate-600 text-sm space-y-2">
+                                        <li><strong>1. Parse Core Fields First</strong><br>Always read standard ORF fields (merchant, items, total) before checking extensions.</li>
+                                        <li><strong>2. Check Extensions</strong><br>Look for jurisdiction-specific data in <code>extensions</code> based on merchant country or tax identifiers.</li>
+                                        <li><strong>3. Graceful Degradation</strong><br>Handle missing <code>extensions</code> gracefully - display core ORF data even without jurisdiction details.</li>
+                                        <li><strong>4. Respect Legal Requirements</strong><br>When displaying receipts, provide links to official fiscal documents for audit/verification.</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="jurisdiction-card">
+                                    <h3 class="text-lg font-semibold text-purple-800 mb-4">For Merchants</h3>
+                                    <ol class="text-slate-600 text-sm space-y-2">
+                                        <li><strong>1. Compliance First</strong><br>Always generate legally-required documents per local regulations.</li>
+                                        <li><strong>2. ORF as Bonus</strong><br>Offer ORF receipts as user-friendly supplement, not replacement.</li>
+                                        <li><strong>3. Link Both</strong><br>Provide easy access to both ORF (for apps/users) and official documents (for audits/authorities).</li>
+                                        <li><strong>4. Retain Legal Documents</strong><br>Store fiscal documents (XML, PDF) for legally-mandated retention periods.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="future-jurisdictions">
+                            <h2>Future Jurisdictions</h2>
+                            <p class="mb-4">This document will be expanded to include:</p>
+                            
+                            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                                <div class="jurisdiction-card">
+                                    <ul class="text-slate-600 text-sm space-y-2">
+                                        <li>• 🇨🇦 Canada - GST/HST</li>
+                                        <li>• 🇸🇬 Singapore - GST e-Invoice</li>
+                                        <li>• 🇹🇭 Thailand - e-Tax Invoice</li>
+                                        <li>• 🇲🇾 Malaysia - e-Invoice</li>
+                                    </ul>
+                                </div>
+                                <div class="jurisdiction-card">
+                                    <ul class="text-slate-600 text-sm space-y-2">
+                                        <li>• 🇿🇦 South Africa - Tax Invoice</li>
+                                        <li>• 🇦🇪 UAE - VAT Tax Invoice</li>
+                                        <li>• 🇸🇦 Saudi Arabia - ZATCA e-Invoice</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                                <h3 class="font-bold text-blue-800 mb-2">Contributing New Jurisdictions</h3>
+                                <p class="text-blue-700 text-sm mb-3">Community contributions are welcome! To add a new jurisdiction:</p>
+                                <ol class="text-blue-600 text-sm space-y-1">
+                                    <li>1. <strong>Open an issue</strong> describing the jurisdiction and legal requirements</li>
+                                    <li>2. <strong>Provide documentation</strong> links to official tax authority specifications</li>
+                                    <li>3. <strong>Submit example</strong> ORF receipt with <code>extensions.{jurisdiction_code}</code></li>
+                                    <li>4. <strong>Define validation rules</strong> (required fields, patterns, enums)</li>
+                                </ol>
+                                <p class="text-blue-600 text-sm mt-3">See <a href="../CONTRIBUTING.md" class="font-semibold hover:underline">CONTRIBUTING.md</a> for full guidelines.</p>
+                            </div>
+                        </section>
+
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-6 mt-8">
+                            <h3 class="font-bold text-amber-800 mb-2">⚠️ Legal Disclaimer</h3>
+                            <p class="text-amber-700 text-sm">ORF is a technical standard and does not provide legal or tax advice. Merchants must ensure compliance with local tax and invoicing laws. This document provides technical guidance for integration but does not constitute legal, tax, or accounting advice.</p>
+                            <p class="text-amber-600 text-sm mt-2"><strong>Always consult with local tax authorities or legal counsel for compliance requirements specific to your jurisdiction and business.</strong></p>
+                        </div>
+
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+                            <h3 class="font-bold text-blue-800 mb-2">Questions or feedback?</h3>
+                            <p class="text-blue-700">Open a <a href="https://github.com/openreceiptformat/orf-spec/discussions" class="font-semibold hover:underline">discussion</a> or <a href="https://github.com/openreceiptformat/orf-spec/issues" class="font-semibold hover:underline">issue</a> on GitHub.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-300 py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>Released under CC0 1.0 Universal • No restrictions, no attribution required</p>
+            <p class="mt-2 text-slate-500">ORF International Compliance Mapping v0.1.0</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <!-- Smooth scrolling for TOC links -->
+    <script>
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
