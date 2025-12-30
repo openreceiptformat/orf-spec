@@ -91,34 +91,94 @@
                 <div class="bg-white rounded-lg shadow-sm p-8">
                     <div class="markdown-content">
                         <section id="introduction">
-                            <h2>Introduction</h2>
-                            <p>The Open Receipt Format (ORF) is a standardized, JSON-based format for digital receipts. It enables interoperability between merchants, point-of-sale systems, and consumer applications while respecting user privacy.</p>
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6">
+                                <h2>Introduction</h2>
+                                <p>The Open Receipt Format (ORF) is a standardized, JSON-based format for digital receipts. It enables interoperability between merchants, point-of-sale systems, and consumer applications while respecting user privacy.</p>
+                            </div>
                             
-                            <h3>Goals</h3>
-                            <ul>
-                                <li>Eliminate paper receipt waste</li>
-                                <li>Provide structured, machine-readable transaction data</li>
-                                <li>Enable privacy-preserving receipt storage</li>
-                                <li>Support merchant innovation (loyalty, analytics, etc.)</li>
-                            </ul>
-
-                            <h3>Non-Goals</h3>
-                            <ul>
-                                <li>Payment processing (handled by existing rails)</li>
-                                <li>User authentication (receipts are bearer tokens)</li>
-                                <li>Regulatory compliance (region-specific requirements handled separately)</li>
-                            </ul>
+                            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                                <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                                    <h3 class="text-green-800 mb-4">✓ Goals</h3>
+                                    <ul class="text-green-700 space-y-2">
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-green-600 mt-1">•</span>
+                                            <span>Eliminate paper receipt waste</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-green-600 mt-1">•</span>
+                                            <span>Provide structured, machine-readable transaction data</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-green-600 mt-1">•</span>
+                                            <span>Enable privacy-preserving receipt storage</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-green-600 mt-1">•</span>
+                                            <span>Support merchant innovation (loyalty, analytics, etc.)</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                                    <h3 class="text-red-800 mb-4">✗ Non-Goals</h3>
+                                    <ul class="text-red-700 space-y-2">
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-red-600 mt-1">•</span>
+                                            <span>Payment processing (handled by existing rails)</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-red-600 mt-1">•</span>
+                                            <span>User authentication (receipts are bearer tokens)</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-red-600 mt-1">•</span>
+                                            <span>Regulatory compliance (region-specific requirements handled separately)</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </section>
 
                         <section id="design-principles">
-                            <h2>Design Principles</h2>
-                            <ol>
-                                <li><strong>Privacy-first</strong>: No required user identifiers</li>
-                                <li><strong>Merchant-friendly</strong>: Easy to generate from existing POS data</li>
-                                <li><strong>Extensible</strong>: Support future features without breaking changes</li>
-                                <li><strong>Human-readable</strong>: JSON format, sensible field names</li>
-                                <li><strong>Minimal</strong>: Required fields only; everything else optional</li>
-                            </ol>
+                            <div class="bg-white border border-slate-200 rounded-lg p-6 mb-8 shadow-sm">
+                                <h2>Design Principles</h2>
+                                <div class="grid gap-4 mt-6">
+                                    <div class="flex items-start gap-4 p-4 bg-purple-50 rounded-lg">
+                                        <div class="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                                        <div>
+                                            <h4 class="font-semibold text-purple-800">Privacy-first</h4>
+                                            <p class="text-purple-700">No required user identifiers</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 p-4 bg-blue-50 rounded-lg">
+                                        <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                                        <div>
+                                            <h4 class="font-semibold text-blue-800">Merchant-friendly</h4>
+                                            <p class="text-blue-700">Easy to generate from existing POS data</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 p-4 bg-green-50 rounded-lg">
+                                        <div class="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                                        <div>
+                                            <h4 class="font-semibold text-green-800">Extensible</h4>
+                                            <p class="text-green-700">Support future features without breaking changes</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 p-4 bg-orange-50 rounded-lg">
+                                        <div class="w-8 h-8 bg-orange-600 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                                        <div>
+                                            <h4 class="font-semibold text-orange-800">Human-readable</h4>
+                                            <p class="text-orange-700">JSON format, sensible field names</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 p-4 bg-red-50 rounded-lg">
+                                        <div class="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center text-sm font-bold">5</div>
+                                        <div>
+                                            <h4 class="font-semibold text-red-800">Minimal</h4>
+                                            <p class="text-red-700">Required fields only; everything else optional</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </section>
 
                         <section id="core-schema">
@@ -149,129 +209,330 @@
                         </section>
 
                         <section id="field-definitions">
-                            <h2>Field Definitions</h2>
-                            
-                            <h3>receipt_id (required)</h3>
-                            <ul>
-                                <li><strong>Type</strong>: String</li>
-                                <li><strong>Description</strong>: Unique identifier for this receipt</li>
-                                <li><strong>Format</strong>: UUID recommended, but any unique string accepted</li>
-                                <li><strong>Example</strong>: <code>"a3f2b1c0-9d7e-4f5a-b8c2-1e3d4f5a6b7c"</code></li>
-                            </ul>
+                            <div class="bg-white border border-slate-200 rounded-lg p-6 mb-8 shadow-sm">
+                                <h2>Field Definitions</h2>
+                                <div class="grid gap-6 mt-6">
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <h3 class="text-lg font-semibold text-slate-800 mb-3">receipt_id <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm font-mono">required</span></h3>
+                                        <ul class="space-y-2 text-slate-600">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Type:</strong> String</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Description:</strong> Unique identifier for this receipt</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Format:</strong> UUID recommended, but any unique string accepted</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Example:</strong> <code>"a3f2b1c0-9d7e-4f5a-b8c2-1e3d4f5a6b7c"</code></div>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                            <h3>orf_version (required)</h3>
-                            <ul>
-                                <li><strong>Type</strong>: String</li>
-                                <li><strong>Description</strong>: Version of ORF spec this receipt follows</li>
-                                <li><strong>Format</strong>: Semantic versioning (major.minor)</li>
-                                <li><strong>Example</strong>: <code>"1.0"</code></li>
-                            </ul>
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <h3 class="text-lg font-semibold text-slate-800 mb-3">orf_version <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm font-mono">required</span></h3>
+                                        <ul class="space-y-2 text-slate-600">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Type:</strong> String</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Description:</strong> Version of ORF spec this receipt follows</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Format:</strong> Semantic versioning (major.minor)</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Example:</strong> <code>"1.0"</code></div>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                            <h3>merchant.legal_name (required)</h3>
-                            <ul>
-                                <li><strong>Type</strong>: String</li>
-                                <li><strong>Description</strong>: Human-readable merchant name</li>
-                                <li><strong>Example</strong>: <code>"The Coffee Shop"</code></li>
-                            </ul>
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <h3 class="text-lg font-semibold text-slate-800 mb-3">merchant.legal_name <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm font-mono">required</span></h3>
+                                        <ul class="space-y-2 text-slate-600">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Type:</strong> String</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Description:</strong> Human-readable merchant name</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Example:</strong> <code>"The Coffee Shop"</code></div>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                            <h3>receipt.issue_timestamp (required)</h3>
-                            <ul>
-                                <li><strong>Type</strong>: String</li>
-                                <li><strong>Format</strong>: ISO 8601 with timezone</li>
-                                <li><strong>Example</strong>: <code>"2024-12-28T14:30:00-08:00"</code></li>
-                            </ul>
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <h3 class="text-lg font-semibold text-slate-800 mb-3">receipt.issue_timestamp <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm font-mono">required</span></h3>
+                                        <ul class="space-y-2 text-slate-600">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Type:</strong> String</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Format:</strong> ISO 8601 with timezone</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Example:</strong> <code>"2024-12-28T14:30:00-08:00"</code></div>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                            <h3>currency (required)</h3>
-                            <ul>
-                                <li><strong>Type</strong>: String</li>
-                                <li><strong>Format</strong>: ISO 4217 currency code</li>
-                                <li><strong>Example</strong>: <code>"USD"</code>, <code>"EUR"</code>, <code>"GBP"</code></li>
-                            </ul>
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <h3 class="text-lg font-semibold text-slate-800 mb-3">currency <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm font-mono">required</span></h3>
+                                        <ul class="space-y-2 text-slate-600">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Type:</strong> String</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Format:</strong> ISO 4217 currency code</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Example:</strong> <code>"USD"</code>, <code>"EUR"</code>, <code>"GBP"</code></div>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                            <h3>line_items[].quantity (required)</h3>
-                            <ul>
-                                <li><strong>Type</strong>: Number</li>
-                                <li><strong>Description</strong>: Quantity of this item purchased</li>
-                                <li><strong>Note</strong>: Can be decimal for weight-based items (e.g., 0.5 kg)</li>
-                            </ul>
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <h3 class="text-lg font-semibold text-slate-800 mb-3">line_items[].quantity <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm font-mono">required</span></h3>
+                                        <ul class="space-y-2 text-slate-600">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Type:</strong> Number</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Description:</strong> Quantity of this item purchased</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Note:</strong> Can be decimal for weight-based items (e.g., 0.5 kg)</div>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                            <h3>total (required)</h3>
-                            <ul>
-                                <li><strong>Type</strong>: Number</li>
-                                <li><strong>Format</strong>: Decimal number, two decimal places recommended</li>
-                                <li><strong>Note</strong>: <code>subtotal + tax + tip - discount = total</code></li>
-                            </ul>
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <h3 class="text-lg font-semibold text-slate-800 mb-3">total <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm font-mono">required</span></h3>
+                                        <ul class="space-y-2 text-slate-600">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Type:</strong> Number</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Format:</strong> Decimal number, two decimal places recommended</div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-slate-500 mt-1">•</span>
+                                                <div><strong>Note:</strong> <code>subtotal + tax + tip - discount = total</code></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </section>
 
                         <section id="implementation-guidelines">
-                            <h2>Implementation Guidelines</h2>
-                            
-                            <h3>For POS Systems</h3>
-                            <p><strong>Generating ORF receipts:</strong></p>
-                            <ol>
-                                <li>After transaction completion, serialize transaction data to ORF JSON</li>
-                                <li>Assign unique <code>receipt_id</code> (UUID recommended)</li>
-                                <li>Include all available data, but only required fields are mandatory</li>
-                                <li>Make receipt available via:
-                                    <ul>
-                                        <li>NFC tag (NDEF format)</li>
-                                        <li>QR code (URL pointing to receipt endpoint)</li>
-                                        <li>API endpoint for programmatic access</li>
-                                        <li>Email/SMS with embedded JSON or link</li>
-                                    </ul>
-                                </li>
-                            </ol>
+                            <div class="bg-white border border-slate-200 rounded-lg p-6 mb-8 shadow-sm">
+                                <h2>Implementation Guidelines</h2>
+                                <div class="grid gap-8 mt-6">
+                                    <div class="bg-blue-50 rounded-lg p-6 border border-blue-200">
+                                        <h3 class="text-xl font-semibold text-blue-800 mb-4">For POS Systems</h3>
+                                        
+                                        <div class="mb-6">
+                                            <h4 class="font-semibold text-blue-700 mb-3">Generating ORF receipts:</h4>
+                                            <ol class="space-y-3 text-blue-600">
+                                                <li class="flex items-start gap-3">
+                                                    <span class="bg-blue-200 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                                                    <span>After transaction completion, serialize transaction data to ORF JSON</span>
+                                                </li>
+                                                <li class="flex items-start gap-3">
+                                                    <span class="bg-blue-200 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                                                    <span>Assign unique <code>receipt_id</code> (UUID recommended)</span>
+                                                </li>
+                                                <li class="flex items-start gap-3">
+                                                    <span class="bg-blue-200 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                                                    <span>Include all available data, but only required fields are mandatory</span>
+                                                </li>
+                                                <li class="flex items-start gap-3">
+                                                    <span class="bg-blue-200 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                                                    <span>Make receipt available via:</span>
+                                                </li>
+                                            </ol>
+                                            <ul class="ml-9 mt-3 space-y-2 text-blue-600">
+                                                <li class="flex items-center gap-2">
+                                                    <span class="text-blue-500">•</span>
+                                                    <span>NFC tag (NDEF format)</span>
+                                                </li>
+                                                <li class="flex items-center gap-2">
+                                                    <span class="text-blue-500">•</span>
+                                                    <span>QR code (URL pointing to receipt endpoint)</span>
+                                                </li>
+                                                <li class="flex items-center gap-2">
+                                                    <span class="text-blue-500">•</span>
+                                                    <span>API endpoint for programmatic access</span>
+                                                </li>
+                                                <li class="flex items-center gap-2">
+                                                    <span class="text-blue-500">•</span>
+                                                    <span>Email/SMS with embedded JSON or link</span>
+                                                </li>
+                                            </ul>
+                                        </div>
 
-                            <p><strong>Storage recommendations:</strong></p>
-                            <ul>
-                                <li>Retain receipts for minimum 90 days</li>
-                                <li>Longer retention for high-value items</li>
-                                <li>Comply with local data retention laws</li>
-                            </ul>
+                                        <div>
+                                            <h4 class="font-semibold text-blue-700 mb-3">Storage recommendations:</h4>
+                                            <ul class="space-y-2 text-blue-600">
+                                                <li class="flex items-start gap-2">
+                                                    <span class="text-blue-500 mt-1">•</span>
+                                                    <span>Retain receipts for minimum 90 days</span>
+                                                </li>
+                                                <li class="flex items-start gap-2">
+                                                    <span class="text-blue-500 mt-1">•</span>
+                                                    <span>Longer retention for high-value items</span>
+                                                </li>
+                                                <li class="flex items-start gap-2">
+                                                    <span class="text-blue-500 mt-1">•</span>
+                                                    <span>Comply with local data retention laws</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
-                            <h3>For Consumer Applications</h3>
-                            <p><strong>Parsing ORF receipts:</strong></p>
-                            <ol>
-                                <li>Validate <code>orf_version</code> is supported (currently only "1.0")</li>
-                                <li>Check all required fields are present</li>
-                                <li>Gracefully handle unknown fields (forward compatibility)</li>
-                                <li>Store locally by default (privacy preservation)</li>
-                                <li>Validate currency codes, country codes against standards</li>
-                            </ol>
+                                    <div class="bg-green-50 rounded-lg p-6 border border-green-200">
+                                        <h3 class="text-xl font-semibold text-green-800 mb-4">For Consumer Applications</h3>
+                                        
+                                        <div class="mb-6">
+                                            <h4 class="font-semibold text-green-700 mb-3">Parsing ORF receipts:</h4>
+                                            <ol class="space-y-3 text-green-600">
+                                                <li class="flex items-start gap-3">
+                                                    <span class="bg-green-200 text-green-800 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                                                    <span>Validate <code>orf_version</code> is supported (currently only "1.0")</span>
+                                                </li>
+                                                <li class="flex items-start gap-3">
+                                                    <span class="bg-green-200 text-green-800 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                                                    <span>Check all required fields are present</span>
+                                                </li>
+                                                <li class="flex items-start gap-3">
+                                                    <span class="bg-green-200 text-green-800 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                                                    <span>Gracefully handle unknown fields (forward compatibility)</span>
+                                                </li>
+                                                <li class="flex items-start gap-3">
+                                                    <span class="bg-green-200 text-green-800 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                                                    <span>Store locally by default (privacy preservation)</span>
+                                                </li>
+                                                <li class="flex items-start gap-3">
+                                                    <span class="bg-green-200 text-green-800 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">5</span>
+                                                    <span>Validate currency codes, country codes against standards</span>
+                                                </li>
+                                            </ol>
+                                        </div>
 
-                            <p><strong>Storage recommendations:</strong></p>
-                            <ul>
-                                <li>Store receipts in local database or file system</li>
-                                <li>Use <code>receipt_id</code> as primary key</li>
-                                <li>Index by timestamp, merchant, total for quick retrieval</li>
-                                <li>Implement search across items, merchants, categories</li>
-                            </ul>
+                                        <div>
+                                            <h4 class="font-semibold text-green-700 mb-3">Storage recommendations:</h4>
+                                            <ul class="space-y-2 text-green-600">
+                                                <li class="flex items-start gap-2">
+                                                    <span class="text-green-500 mt-1">•</span>
+                                                    <span>Store receipts in local database or file system</span>
+                                                </li>
+                                                <li class="flex items-start gap-2">
+                                                    <span class="text-green-500 mt-1">•</span>
+                                                    <span>Use <code>receipt_id</code> as primary key</span>
+                                                </li>
+                                                <li class="flex items-start gap-2">
+                                                    <span class="text-green-500 mt-1">•</span>
+                                                    <span>Index by timestamp, merchant, total for quick retrieval</span>
+                                                </li>
+                                                <li class="flex items-start gap-2">
+                                                    <span class="text-green-500 mt-1">•</span>
+                                                    <span>Implement search across items, merchants, categories</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </section>
 
                         <section id="security-considerations">
-                            <h2>Security Considerations</h2>
-                            
-                            <h3>Privacy</h3>
-                            <ul>
-                                <li>No Personally Identifiable Information (PII) required in base format</li>
-                                <li><code>receipt_id</code> should not be derivable from transaction details</li>
-                                <li>Payment details should be minimal (last 4 digits only)</li>
-                                <li>Merchants should not embed tracking identifiers</li>
-                            </ul>
+                            <div class="bg-white border border-slate-200 rounded-lg p-6 mb-8 shadow-sm">
+                                <h2>Security Considerations</h2>
+                                <div class="grid md:grid-cols-3 gap-6 mt-6">
+                                    <div class="bg-red-50 rounded-lg p-6 border border-red-200">
+                                        <h3 class="text-lg font-semibold text-red-800 mb-4">🔒 Privacy</h3>
+                                        <ul class="space-y-3 text-red-700">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-500 mt-1">•</span>
+                                                <span>No Personally Identifiable Information (PII) required in base format</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-500 mt-1">•</span>
+                                                <span><code>receipt_id</code> should not be derivable from transaction details</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-500 mt-1">•</span>
+                                                <span>Payment details should be minimal (last 4 digits only)</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-500 mt-1">•</span>
+                                                <span>Merchants should not embed tracking identifiers</span>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                            <h3>Transmission</h3>
-                            <ul>
-                                <li>Use HTTPS for any API endpoints serving receipts</li>
-                                <li>Consider encryption for NFC transmission (though typically short-range is sufficient)</li>
-                                <li>Implement rate limiting on receipt retrieval endpoints</li>
-                            </ul>
+                                    <div class="bg-orange-50 rounded-lg p-6 border border-orange-200">
+                                        <h3 class="text-lg font-semibold text-orange-800 mb-4">📡 Transmission</h3>
+                                        <ul class="space-y-3 text-orange-700">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-orange-500 mt-1">•</span>
+                                                <span>Use HTTPS for any API endpoints serving receipts</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-orange-500 mt-1">•</span>
+                                                <span>Consider encryption for NFC transmission (though typically short-range is sufficient)</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-orange-500 mt-1">•</span>
+                                                <span>Implement rate limiting on receipt retrieval endpoints</span>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                            <h3>Authenticity</h3>
-                            <ul>
-                                <li>Consider digital signatures for high-value receipts</li>
-                                <li>Use HMAC or JWT for receipt authenticity verification</li>
-                                <li>Merchant certificates could validate receipt origin</li>
-                            </ul>
+                                    <div class="bg-purple-50 rounded-lg p-6 border border-purple-200">
+                                        <h3 class="text-lg font-semibold text-purple-800 mb-4">✓ Authenticity</h3>
+                                        <ul class="space-y-3 text-purple-700">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-purple-500 mt-1">•</span>
+                                                <span>Consider digital signatures for high-value receipts</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-purple-500 mt-1">•</span>
+                                                <span>Use HMAC or JWT for receipt authenticity verification</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-purple-500 mt-1">•</span>
+                                                <span>Merchant certificates could validate receipt origin</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </section>
 
                         <section id="examples">
