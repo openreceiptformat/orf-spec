@@ -40,6 +40,8 @@
                 </div>
                 <div class="hidden md:flex gap-6">
                     <a href="../landing_page.html" class="text-slate-600 hover:text-blue-600 transition-colors">Home</a>
+                    <a href="international-compliance.html" class="text-slate-600 hover:text-blue-600 transition-colors">International Compliance</a>
+                    <a href="orf_privacy_data_minimization_principles_v_1.html" class="text-slate-600 hover:text-blue-600 transition-colors">Privacy Principles</a>
                     <a href="../tools/validator/" class="text-slate-600 hover:text-blue-600 transition-colors">Validator</a>
                     <a href="https://github.com/openreceiptformat/orf-spec" class="text-slate-600 hover:text-blue-600 transition-colors">
                         GitHub
@@ -76,6 +78,7 @@
                         <a href="#field-definitions" class="toc-link block">Field Definitions</a>
                         <a href="#implementation-guidelines" class="toc-link block">Implementation Guidelines</a>
                         <a href="#security-considerations" class="toc-link block">Security Considerations</a>
+                        <a href="#related-documents" class="toc-link block">Related Documents</a>
                         <a href="#examples" class="toc-link block">Examples</a>
                         <a href="#versioning" class="toc-link block">Versioning</a>
                         <a href="#license" class="toc-link block">License</a>
@@ -492,6 +495,15 @@
                                                 <span class="text-red-500 mt-1">•</span>
                                                 <span>Merchants should not embed tracking identifiers</span>
                                             </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-500 mt-1">•</span>
+                                                <span>Treat customer as Optional, Jurisdiction-triggered, Explicitly non-identifying by default</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-500 mt-1">•</span>
+                                                <span>See <a href="orf_privacy_data_minimization_principles_v_1.html" class="font-semibold hover:underline">Privacy & Data Minimization Principles</a> for detailed guidance</span>
+                                            </li>
+                
                                         </ul>
                                     </div>
 
@@ -530,6 +542,28 @@
                                             </li>
                                         </ul>
                                     </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="related-documents" class="special-section">
+                            <h2>Related Documents</h2>
+                            <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                                <p>ORF includes several companion documents that provide additional guidance:</p>
+                                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                    <div class="bg-white rounded-lg p-4 border border-slate-200">
+                                        <h3 class="font-semibold text-blue-800 mb-2">🔒 Privacy & Data Minimization</h3>
+                                        <p class="text-slate-600 text-sm mb-3">Defines privacy-first principles, data classification, and customer identity models for ORF implementations.</p>
+                                        <a href="orf_privacy_data_minimization_principles_v_1.html" class="text-blue-600 hover:text-blue-800 font-semibold">Read Privacy Principles →</a>
+                                    </div>
+                                    <div class="bg-white rounded-lg p-4 border border-slate-200">
+                                        <h3 class="font-semibold text-green-800 mb-2">🌍 International Compliance</h3>
+                                        <p class="text-slate-600 text-sm mb-3">Maps ORF to jurisdiction-specific tax and fiscal requirements for global compliance.</p>
+                                        <a href="international-compliance.html" class="text-green-600 hover:text-green-800 font-semibold">View Compliance Guide →</a>
+                                    </div>
+                                </div>
+                                <div class="bg-blue-50 rounded-lg p-4 mt-4 border border-blue-200">
+                                    <p class="text-blue-700 text-sm"><strong>Note:</strong> These documents are normative companions to the core ORF specification and are incorporated by reference.</p>
                                 </div>
                             </div>
                         </section>
