@@ -157,6 +157,12 @@ See schema.json
 - `receipt_id` should not be derivable from transaction details
 - Payment details should be minimal (last 4 digits only)
 - Merchants should not embed tracking identifiers
+- Treat customer as:
+-- Optional
+-- Jurisdiction-triggered
+-- Explicitly non-identifying by default
+
+No core field should imply identity.
 
 ### Transmission
 
