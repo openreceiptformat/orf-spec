@@ -96,7 +96,8 @@ We're building this in the open and welcome contributions:
 ## Who's Using ORF?
 
 **Consumer Apps:**
-- [The Ledger](https://github.com/yourusername/ledger) - Reference implementation
+- [Tommy the Tapir](https://github.com/openreceiptformat/Tommy-the-Tapir/tree/main) - iOS reference implementation (open source, contributions welcome!)
+- [Recipta](https://github.com/openreceiptformat/recipta) - Android reference implementation (open source, contributions welcome!)
 - *Your app here - submit a PR!*
 
 **POS Integrations:**
